@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.GitHub.Tor1ant</groupId>
+    <groupId>com.GitHub.vovasitnikov</groupId>
     <artifactId>main-server</artifactId>
 
     <properties>
