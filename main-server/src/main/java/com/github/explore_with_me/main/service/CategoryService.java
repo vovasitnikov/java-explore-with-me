@@ -2,7 +2,6 @@ package com.github.explore_with_me.main.service;
 
 import com.github.explore_with_me.main.dto.CategoryDto;
 import com.github.explore_with_me.main.dto.NewCategoryDto;
-import com.github.explore_with_me.main.dto.NewUserRequest;
 import com.github.explore_with_me.main.exception.NotFoundException;
 import com.github.explore_with_me.main.model.Category;
 import com.github.explore_with_me.main.repository.CategoryRepository;

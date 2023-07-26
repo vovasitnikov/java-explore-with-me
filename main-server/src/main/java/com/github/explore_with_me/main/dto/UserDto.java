@@ -1,6 +1,5 @@
 package com.github.explore_with_me.main.dto;
 
-import com.github.explore_with_me.main.model.Category;
 import com.github.explore_with_me.main.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
