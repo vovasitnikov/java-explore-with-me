@@ -42,7 +42,7 @@ public class PrivateEventController {
 
     @GetMapping
     public List<EventShortDto> getUsersEvents(@PathVariable Long userId, @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size) {
+                                              @RequestParam(defaultValue = "10") int size) {
         return eventService.getUserEvents(userId, new PaginationParams(from, size));
     }
 
@@ -53,7 +53,7 @@ public class PrivateEventController {
 
     @PatchMapping("/{eventId}")
     public EventOutDto patchEvent(@PathVariable Long userId, @PathVariable Long eventId,
-            @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
+                                  @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
         if (updateEventUserDto.getEventDate() != null) {
             dateTimeValidate(updateEventUserDto.getEventDate());
         }
@@ -67,7 +67,8 @@ public class PrivateEventController {
 
     @PatchMapping("{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestsStatus(@PathVariable Long userId,
-            @PathVariable Long eventId, @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
+                                                               @PathVariable Long eventId,
+                                                               @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
         return eventService.changeRequestsStatus(userId, eventId, statusUpdateRequest);
     }
 
