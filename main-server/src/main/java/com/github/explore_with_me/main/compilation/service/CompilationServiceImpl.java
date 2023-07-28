@@ -55,6 +55,7 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Подборка с id= " + compId + " удалена");
     }
 
+    @Transactional
     @Override
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilationForUpdate = compilationRepository.findById(compId)
@@ -77,6 +78,7 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationDto;
     }
 
+    @Transactional
     @Override
     public CompilationDto getCompilation(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
@@ -87,6 +89,7 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationDto;
     }
 
+    @Transactional
     @Override
     public List<CompilationDto> getCompilations(boolean pinned, PaginationParams paginationParams) {
         PageRequest pageRequest = PageRequest.of(paginationParams.getFrom() / paginationParams.getSize(),
