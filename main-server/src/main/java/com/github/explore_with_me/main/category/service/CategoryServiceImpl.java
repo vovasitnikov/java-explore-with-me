@@ -51,7 +51,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
-        Optional<Category> oldCategory = Optional.of(categoryRepository.findById(categoryId).orElseThrow());
+        Optional<Category> oldCategory = categoryRepository.findById(categoryId);
+        if (oldCategory.isEmpty()) {
+            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
+        }
         Category updatedCategory = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
         updatedCategory.setId(categoryId);
         try {
@@ -83,7 +86,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto getCategoryById(Long categoryId) {
-        Optional<Category> category = Optional.of(categoryRepository.findById(categoryId).orElseThrow());
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isEmpty()) {
+            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
+        }
         CategoryOutDto categoryDto = categoryMapper.categoryToCategoryOutDto(category.get());
         log.info("Получена категория= " + category.get());
         return categoryDto;
