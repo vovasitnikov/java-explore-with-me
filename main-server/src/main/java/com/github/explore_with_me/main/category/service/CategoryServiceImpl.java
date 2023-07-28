@@ -86,10 +86,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto getCategoryById(Long categoryId) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
+/*        Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isEmpty()) {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
-        }
+        }*/
+        Optional<Category> category = Optional.ofNullable(categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена")));
         CategoryOutDto categoryDto = categoryMapper.categoryToCategoryOutDto(category.get());
         log.info("Получена категория= " + category.get());
         return categoryDto;
