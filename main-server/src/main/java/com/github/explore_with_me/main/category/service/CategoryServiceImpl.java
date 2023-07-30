@@ -27,11 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-        try {
+        //try {
             categoryRepository.save(category);
-        } catch (Exception e) {
+/*        } catch (Exception e) {
             handleConflictException(e);
-        }
+        }*/
         log.info("Категория= " + category + " сохранена");
         return categoryMapper.categoryToCategoryOutDto(category);
     }
