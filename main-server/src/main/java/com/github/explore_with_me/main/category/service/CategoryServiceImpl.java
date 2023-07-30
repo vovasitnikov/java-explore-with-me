@@ -27,9 +27,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-        //try {
+        if (categoryRepository.existsById(category.getId())) {
             categoryRepository.save(category);
-/*        } catch (Exception e) {
+        } else {
+            throw new NotFoundException("Категория " + category.getId() + " не найдена");
+        }
+
+/*        try {
+            categoryRepository.save(category);
+        } catch (Exception e) {
             handleConflictException(e);
         }*/
         log.info("Категория= " + category + " сохранена");
