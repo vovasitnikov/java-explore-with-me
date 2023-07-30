@@ -6,7 +6,7 @@ import com.github.explore_with_me.main.category.dto.NewCategoryDto;
 import com.github.explore_with_me.main.category.mapper.CategoryMapper;
 import com.github.explore_with_me.main.category.model.Category;
 import com.github.explore_with_me.main.category.repository.CategoryRepository;
-//import com.github.explore_with_me.main.exception.model.ConflictException;
+import com.github.explore_with_me.main.exception.model.ConflictException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
 import java.util.List;
 import java.util.Optional;
@@ -27,11 +27,11 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-        //try {
+        try {
             categoryRepository.save(category);
-/*        } catch (Exception e) {
+        } catch (Exception e) {
             handleConflictException(e);
-        }*/
+        }
         log.info("Категория= " + category + " сохранена");
         return categoryMapper.categoryToCategoryOutDto(category);
     }
@@ -41,11 +41,11 @@ public class CategoryServiceImpl implements CategoryService {
         if (!categoryRepository.existsById(categoryId)) {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
         }
-        //try {
+        try {
             categoryRepository.deleteById(categoryId);
-/*        } catch (Exception e) {
+        } catch (Exception e) {
             handleConflictException(e);
-        }*/
+        }
         log.info("Категория с id= " + categoryId + " удалена");
     }
 
@@ -55,23 +55,23 @@ public class CategoryServiceImpl implements CategoryService {
         .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена")));
         Category updatedCategory = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
         updatedCategory.setId(categoryId);
-        //try {
+        try {
             categoryRepository.save(updatedCategory);
 
-/*        } catch (Exception e) {
+        } catch (Exception e) {
             handleConflictException(e);
-        }*/
+        }
         log.info("Категория с id= " + categoryId + " изменила название с = " + oldCategory.get().getName() + " на = "
                 + newCategoryDto.getName());
         return categoryMapper.categoryToCategoryOutDto(updatedCategory);
     }
 
-/*    private void handleConflictException(Exception e) {
+    private void handleConflictException(Exception e) {
         StringBuilder stringBuilder = new StringBuilder(e.getCause().getCause().getMessage());
         int indexEqualsSign = stringBuilder.indexOf("=");
         stringBuilder.delete(0, indexEqualsSign + 1);
         throw new ConflictException(stringBuilder.toString().replace("\"", "").trim());
-    }*/
+    }
 
     @Override
     public List<CategoryOutDto> getCategories(PaginationParams paginationParams) {
