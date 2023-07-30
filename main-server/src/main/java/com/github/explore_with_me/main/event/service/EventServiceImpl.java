@@ -231,13 +231,11 @@ public class EventServiceImpl implements EventService {
     public List<EventOutDto> findEventsByAdmin(EventFindParam eventFindParam, PaginationParams params) {
         PageRequest pagination = PageRequest.of(params.getFrom() / params.getSize(),
                 params.getSize());
-        LocalDateTime start;
+        LocalDateTime start = checkStart(eventFindParam);
         LocalDateTime end;
         if (eventFindParam.getRangeStart() == null || eventFindParam.getRangeEnd() == null) {
-            start = LocalDateTime.now();
             end = start.plusYears(1);
         } else {
-            start = eventFindParam.getRangeStart();
             end = eventFindParam.getRangeEnd();
         }
         List<EventOutDto> eventsByEventParamAndPaginationParams = eventRepository
@@ -311,5 +309,13 @@ public class EventServiceImpl implements EventService {
     private long getViews(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {
         List<StatsDto> eventStats = statsClient.getStats(start, end, uris, unique);
         return eventStats.get(0).getHits();
+    }
+
+    private LocalDateTime checkStart(EventFindParam eventFindParam){
+        if (eventFindParam.getRangeStart() == null || eventFindParam.getRangeEnd() == null) {
+            return LocalDateTime.now();
+        } else {
+            return eventFindParam.getRangeStart();
+        }
     }
 }
