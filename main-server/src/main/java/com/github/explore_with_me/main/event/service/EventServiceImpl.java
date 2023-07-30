@@ -271,8 +271,8 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEvents(GetEventsParam getEventsParam, PaginationParams pagination) {
         PageRequest pageRequest;
-        LocalDateTime start = null;
-        LocalDateTime end = null;
+        LocalDateTime start;
+        LocalDateTime end;
         Sort sort;
 
         //check(getEventsParam, start, end);
