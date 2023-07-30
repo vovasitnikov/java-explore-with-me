@@ -271,16 +271,19 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEvents(GetEventsParam getEventsParam, PaginationParams pagination) {
         PageRequest pageRequest;
-        LocalDateTime start;
-        LocalDateTime end;
+        LocalDateTime start = null;
+        LocalDateTime end = null;
         Sort sort;
-        if (getEventsParam.getRangeStart() == null || getEventsParam.getRangeEnd() == null) {
+
+        check(getEventsParam, start, end);
+
+/*        if (getEventsParam.getRangeStart() == null || getEventsParam.getRangeEnd() == null) {
             start = LocalDateTime.now();
             end = start.plusYears(1);
         } else {
             start = getEventsParam.getRangeStart();
             end = getEventsParam.getRangeEnd();
-        }
+        }*/
         if (getEventsParam.getSort() == null || getEventsParam.getSort().equals(Sorting.EVENT_DATE)) {
             sort = Sort.by("eventDate").descending();
         } else {
@@ -311,5 +314,15 @@ public class EventServiceImpl implements EventService {
     private long getViews(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {
         List<StatsDto> eventStats = statsClient.getStats(start, end, uris, unique);
         return eventStats.get(0).getHits();
+    }
+    
+    private void check(GetEventsParam getEventsParam, LocalDateTime start, LocalDateTime end) {
+        if (getEventsParam.getRangeStart() == null || getEventsParam.getRangeEnd() == null) {
+            start = LocalDateTime.now();
+            end = start.plusYears(1);
+        } else {
+            start = getEventsParam.getRangeStart();
+            end = getEventsParam.getRangeEnd();
+        }
     }
 }
