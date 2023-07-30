@@ -46,10 +46,9 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Long categoryId) {
         if (!categoryRepository.existsById(categoryId)) {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
-        } else {
-            categoryRepository.deleteById(categoryId);
         }
 
+        categoryRepository.deleteById(categoryId);
 /*        try {
             categoryRepository.deleteById(categoryId);
         } catch (Exception e) {
