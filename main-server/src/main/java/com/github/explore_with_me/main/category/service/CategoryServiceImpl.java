@@ -27,11 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-/*        if (categoryRepository.existsById(category.getId())) {
-            categoryRepository.save(category);
-        } else {
-            throw new NotFoundException("Категория " + category.getId() + " не найдена");
-        }*/
 
         try {
             categoryRepository.save(category);
@@ -48,12 +43,11 @@ public class CategoryServiceImpl implements CategoryService {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
         }
 
-        categoryRepository.deleteById(categoryId);
-/*        try {
+        try {
             categoryRepository.deleteById(categoryId);
         } catch (Exception e) {
             handleConflictException(e);
-        }*/
+        }
         log.info("Категория с id= " + categoryId + " удалена");
     }
 
