@@ -312,6 +312,4 @@ public class EventServiceImpl implements EventService {
         List<StatsDto> eventStats = statsClient.getStats(start, end, uris, unique);
         return eventStats.get(0).getHits();
     }
-
-    private
 }
