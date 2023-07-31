@@ -271,12 +271,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventShortDto> getEvents(GetEventsParam getEventsParam, PaginationParams pagination) {
         PageRequest pageRequest;
-        LocalDateTime start;
-        LocalDateTime end;
+        LocalDateTime start = LocalDateTime.now();;
+        LocalDateTime end = start.plusYears(1);;
         Sort sort;
         if (getEventsParam.getRangeStart() == null || getEventsParam.getRangeEnd() == null) {
-            start = LocalDateTime.now();
-            end = start.plusYears(1);
+/*            start = LocalDateTime.now();
+            end = start.plusYears(1);*/
         } else {
             start = getEventsParam.getRangeStart();
             end = getEventsParam.getRangeEnd();
