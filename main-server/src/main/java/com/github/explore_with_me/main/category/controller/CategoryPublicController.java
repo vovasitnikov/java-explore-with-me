@@ -19,7 +19,7 @@ public class CategoryPublicController {
 
     @GetMapping()
     public List<CategoryOutDto> getCategories(@RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size) {
+                                              @RequestParam(defaultValue = "10") int size) {
 
         return categoryService.getCategories(from,size);
     }

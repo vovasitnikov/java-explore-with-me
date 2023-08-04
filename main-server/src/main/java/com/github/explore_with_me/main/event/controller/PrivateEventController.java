@@ -36,26 +36,30 @@ public class PrivateEventController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public EventOutDto createEvent(@RequestBody @Valid NewEventDto newEventDto, @PathVariable Long userId) {
+    public EventOutDto createEvent(@RequestBody @Valid NewEventDto newEventDto,
+                                   @PathVariable Long userId) {
         dateTimeValidate(newEventDto.getEventDate());
         return eventService.createEvent(newEventDto, userId);
 
     }
 
     @GetMapping
-    public List<EventShortDto> getUsersEvents(@PathVariable Long userId, @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size) {
+    public List<EventShortDto> getUsersEvents(@PathVariable Long userId,
+                                              @RequestParam(defaultValue = "0") int from,
+                                              @RequestParam(defaultValue = "10") int size) {
         return eventService.getUserEvents(userId, from, size);
     }
 
     @GetMapping("/{eventId}")
-    public EventOutDto getUserEvent(@PathVariable Long userId, @PathVariable Long eventId) {
+    public EventOutDto getUserEvent(@PathVariable Long userId,
+                                    @PathVariable Long eventId) {
         return eventService.getUserEvent(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
-    public EventOutDto patchEvent(@PathVariable Long userId, @PathVariable Long eventId,
-            @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
+    public EventOutDto patchEvent(@PathVariable Long userId,
+                                  @PathVariable Long eventId,
+                                  @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
         if (updateEventUserDto.getEventDate() != null) {
             dateTimeValidate(updateEventUserDto.getEventDate());
         }
@@ -63,33 +67,39 @@ public class PrivateEventController {
     }
 
     @GetMapping("{eventId}/requests")
-    public List<ParticipationRequestDto> getEventRequests(@PathVariable Long userId, @PathVariable Long eventId) {
+    public List<ParticipationRequestDto> getEventRequests(@PathVariable Long userId,
+                                                          @PathVariable Long eventId) {
         return eventService.getEventRequests(userId, eventId);
     }
 
     @PatchMapping("{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestsStatus(@PathVariable Long userId,
-            @PathVariable Long eventId, @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
+                                                               @PathVariable Long eventId,
+                                                               @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
         return eventService.changeRequestsStatus(userId, eventId, statusUpdateRequest);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("{eventId}/comments")
-    public CommentDto createComment(@PathVariable Long eventId, @PathVariable Long userId, @RequestBody
-    @Valid InputCommentDto inputCommentDto) {
+    public CommentDto createComment(@PathVariable Long eventId,
+                                    @PathVariable Long userId,
+                                    @RequestBody @Valid InputCommentDto inputCommentDto) {
         return eventService.createComment(inputCommentDto, userId, eventId);
     }
 
     @PatchMapping("{eventId}/comments/{commentId}")
-    public CommentDto patchComment(@PathVariable Long eventId, @PathVariable Long userId,
-            @RequestBody InputCommentDto inputCommentDto, @PathVariable Long commentId) {
+    public CommentDto patchComment(@PathVariable Long eventId,
+                                   @PathVariable Long userId,
+                                   @RequestBody InputCommentDto inputCommentDto,
+                                   @PathVariable Long commentId) {
         return eventService.changeComment(inputCommentDto, userId, eventId, commentId);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("{ignoredEventId}/comments/{commentId}")
     public void deleteComment(@PathVariable Long userId,
-            @PathVariable Long commentId, @PathVariable Long ignoredEventId) {
+                              @PathVariable Long commentId,
+                              @PathVariable Long ignoredEventId) {
         eventService.removeByCommentIdAndAuthorId(commentId, userId);
     }
 

@@ -29,11 +29,17 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "event_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,
+               cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "event_id",
+                referencedColumnName = "id",
+                nullable = false)
     private Event event;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "author_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,
+               cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "author_id",
+                referencedColumnName = "id",
+                nullable = false)
     private User author;
     @Column(name = "created")
     private LocalDateTime created;

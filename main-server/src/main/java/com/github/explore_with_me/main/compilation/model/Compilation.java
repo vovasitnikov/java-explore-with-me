@@ -1,6 +1,5 @@
 package com.github.explore_with_me.main.compilation.model;
 
-
 import com.github.explore_with_me.main.event.model.Event;
 import java.util.List;
 import javax.persistence.CascadeType;

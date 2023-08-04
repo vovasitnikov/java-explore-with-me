@@ -27,7 +27,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getUsersInfo(List<Long> ids, int from, int size) {
+    public List<UserDto> getUsersInfo(List<Long> ids,
+                                      int from,
+                                      int size) {
         PageRequest pagination = PageRequest.of(from / size,
                 size);
         List<User> all = new ArrayList<>();

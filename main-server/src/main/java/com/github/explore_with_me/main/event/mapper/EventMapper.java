@@ -7,6 +7,8 @@ import com.github.explore_with_me.main.event.enumerated.State;
 
 public interface EventMapper {
 
-    Event updateEvent(Event eventForUpdate, Category categoryForUpdate, State eventStateForUpdate,
+    Event updateEvent(Event eventForUpdate,
+                      Category categoryForUpdate,
+                      State eventStateForUpdate,
             UpdateEventUserDto updateEventUserDto);
 }

@@ -26,10 +26,12 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "event_id", referencedColumnName = "id")
+    @JoinColumn(name = "event_id",
+                referencedColumnName = "id")
     private Event event;
     @ManyToOne
-    @JoinColumn(name = "requester_id", referencedColumnName = "id")
+    @JoinColumn(name = "requester_id",
+                referencedColumnName = "id")
     private User requester;
     @Column(name = "status")
     @Enumerated(EnumType.STRING)

@@ -31,7 +31,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public ParticipationRequestDto createRequest(Long userId, Long eventId) {
+    public ParticipationRequestDto createRequest(Long userId,
+                                                 Long eventId) {
         Request request = new Request();
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
@@ -68,7 +69,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public ParticipationRequestDto cancelRequestByRequester(Long userId, Long requestId) {
+    public ParticipationRequestDto cancelRequestByRequester(Long userId,
+                                                            Long requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(
                         () -> new NotFoundException("запрос на участие в событии с id= " + requestId + " не найдено"));

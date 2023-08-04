@@ -63,7 +63,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto createEvent(NewEventDto newEventDto, Long userId) {
+    public EventOutDto createEvent(NewEventDto newEventDto,
+                                   Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь c id " + userId + " не найден"));
         Category category = categoryRepository.findById(newEventDto.getCategory())
@@ -91,7 +92,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getUserEvents(Long userId, int from, int size) {
+    public List<EventShortDto> getUserEvents(Long userId,
+                                             int from,
+                                             int size) {
         PageRequest pagination = PageRequest.of(from / size,
                 size);
         List<Event> allInitiatorEvents = eventRepository.findAllByInitiatorId(userId, pagination);
@@ -101,7 +104,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventOutDto getUserEvent(Long userId, Long eventId) {
+    public EventOutDto getUserEvent(Long userId,
+                                    Long eventId) {
         Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId);
         if (event == null) {
             throw new NotFoundException("Событие с id= " + eventId + " не найдено");
@@ -113,7 +117,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto patchEvent(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
+    public EventOutDto patchEvent(Long userId,
+                                  Long eventId,
+                                  UpdateEventUserDto updateEventUserDto) {
         Event event = eventRepository.findEventByIdWithCategoryAndLocation(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
         if (event.getState().equals(State.PUBLISHED)) {
@@ -142,7 +148,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getEventRequests(Long userId,
+                                                          Long eventId) {
         List<ParticipationRequestDto> eventParticipationRequests = requestRepository.findAllRequestForEvent(userId,
                 eventId);
         log.info("Получен список запросов на участие в событии с id= " + eventId + "\n Список запросов= "
@@ -152,8 +159,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventRequestStatusUpdateResult changeRequestsStatus(Long userId, Long eventId,
-            EventRequestStatusUpdateRequest statusUpdateRequest) {
+    public EventRequestStatusUpdateResult changeRequestsStatus(Long userId,
+                                                               Long eventId,
+                                                               EventRequestStatusUpdateRequest statusUpdateRequest) {
         List<Request> requests = requestRepository.findAllByIdInAndEventInitiatorIdAndEventId(
                         statusUpdateRequest.getRequestIds(), userId,
                         eventId).stream()
@@ -190,7 +198,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto publishOrCancelEvent(Long eventId, UpdateEventUserDto updateEventUserDto) {
+    public EventOutDto publishOrCancelEvent(Long eventId,
+                                            UpdateEventUserDto updateEventUserDto) {
         LocalDateTime publicationDate = LocalDateTime.now();
         if (updateEventUserDto.getEventDate() != null && updateEventUserDto.getEventDate()
                 .isBefore(publicationDate.plusHours(1))
@@ -232,8 +241,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventOutDto> findEventsByAdmin(List<Long> users, List<State> states, List<Long> categories,
-            LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+    public List<EventOutDto> findEventsByAdmin(List<Long> users,
+                                               List<State> states,
+                                               List<Long> categories,
+                                               LocalDateTime rangeStart,
+                                               LocalDateTime rangeEnd,
+                                               Integer from, Integer size) {
         PageRequest pagination = PageRequest.of(from / size,
                 size);
         LocalDateTime start;
@@ -258,7 +271,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto getEvent(Long eventId, String[] uris) {
+    public EventOutDto getEvent(Long eventId,
+                                String[] uris) {
         Event event = eventRepository.findEventByIdWithCategoryAndLocation(
                 eventId).orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
         if (event.getState() != State.PUBLISHED) {
@@ -274,8 +288,15 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEvents(String text, List<Long> categories, Boolean paid, LocalDateTime rangeStart,
-            LocalDateTime rangeEnd, boolean onlyAvailable, Sorting sort, int from, int size) {
+    public List<EventShortDto> getEvents(String text,
+                                         List<Long> categories,
+                                         Boolean paid,
+                                         LocalDateTime rangeStart,
+                                         LocalDateTime rangeEnd,
+                                         boolean onlyAvailable,
+                                         Sorting sort,
+                                         int from,
+                                         int size) {
         PageRequest pageRequest;
         LocalDateTime start;
         LocalDateTime end;
@@ -313,14 +334,19 @@ public class EventServiceImpl implements EventService {
         return shortEventDtos;
     }
 
-    private long getViews(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {
+    private long getViews(LocalDateTime start,
+                          LocalDateTime end,
+                          String[] uris,
+                          boolean unique) {
         List<StatsDto> eventStats = statsClient.getStats(start, end, uris, unique);
         return eventStats.get(0).getHits();
     }
 
     @Transactional
     @Override
-    public CommentDto createComment(InputCommentDto inputCommentDto, Long authorId, Long eventId) {
+    public CommentDto createComment(InputCommentDto inputCommentDto,
+                                    Long authorId,
+                                    Long eventId) {
         User user = userRepository.findById(authorId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id= " + authorId + " не найден"));
         Event event = eventRepository.findById(eventId)
@@ -343,7 +369,10 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public CommentDto changeComment(InputCommentDto inputCommentDto, Long authorId, Long eventId, Long commentId) {
+    public CommentDto changeComment(InputCommentDto inputCommentDto,
+                                    Long authorId,
+                                    Long eventId,
+                                    Long commentId) {
         if (!userRepository.existsById(authorId)) {
             throw new NotFoundException("Пользователь с id= " + authorId + " не найден");
         }
@@ -367,7 +396,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void removeByCommentIdAndAuthorId(Long commentId, Long authorId) {
+    public void removeByCommentIdAndAuthorId(Long commentId,
+                                             Long authorId) {
         if (!userRepository.existsById(authorId)) {
             throw new NotFoundException("Пользователь с id= " + authorId + " не найден");
         }

@@ -18,14 +18,16 @@ public abstract class CompilationMapper {
     public abstract Compilation dtoToCompilation(NewCompilationDto newCompilationDto);
 
     @AfterMapping
-    public void setEventsToCompilation(Compilation compilation, @MappingTarget List<Event> events) {
+    public void setEventsToCompilation(Compilation compilation,
+                                       @MappingTarget List<Event> events) {
         compilation.setEvent(events);
     }
 
     public abstract CompilationDto compilationtoCompilationDto(Compilation compilation);
 
     @AfterMapping
-    protected void checkEventsIsNull(Compilation compilation, @MappingTarget CompilationDto dto) {
+    protected void checkEventsIsNull(Compilation compilation,
+                                     @MappingTarget CompilationDto dto) {
         if (compilation.getEvent() == null || compilation.getEvent().isEmpty()) {
             dto.setEvents(new ArrayList<>());
         }

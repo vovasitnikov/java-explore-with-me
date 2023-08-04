@@ -11,8 +11,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Long>,
-        PagingAndSortingRepository<Compilation, Long> {
-
+                                               PagingAndSortingRepository<Compilation, Long> {
     @Query("select c from Compilation as c "
             + "left join fetch c.event as e "
             + "where c.pinned = :pinned")

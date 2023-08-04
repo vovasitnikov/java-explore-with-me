@@ -33,7 +33,10 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
+    public List<StatsDto> getStats(LocalDateTime start,
+                                   LocalDateTime end,
+                                   List<String> uris,
+                                   boolean unique) {
         List<StatsDto> stats = new ArrayList<>();
 
         if (unique && uris != null) {

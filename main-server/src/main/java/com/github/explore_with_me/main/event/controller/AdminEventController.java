@@ -29,12 +29,13 @@ public class AdminEventController {
 
     @PatchMapping("/{eventId}")
     public EventOutDto publishOrCancelEvent(@PathVariable Long eventId,
-            @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
+                                            @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
         return eventService.publishOrCancelEvent(eventId, updateEventUserDto);
     }
 
     @GetMapping
-    public List<EventOutDto> findEvents(@RequestParam(required = false) List<Long> users,
+    public List<EventOutDto> findEvents(
+            @RequestParam(required = false) List<Long> users,
             @RequestParam(required = false) List<State> states,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
@@ -46,7 +47,8 @@ public class AdminEventController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{ignoredEventId}/comments/{commentId}")
-    public void removeCommentByAdmin(@PathVariable Long ignoredEventId, @PathVariable Long commentId) {
+    public void removeCommentByAdmin(@PathVariable Long ignoredEventId,
+                                     @PathVariable Long commentId) {
         eventService.removeCommentById(commentId);
     }
 }

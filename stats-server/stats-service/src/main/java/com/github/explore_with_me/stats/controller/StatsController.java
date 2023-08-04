@@ -30,7 +30,8 @@ public class StatsController {
     }
 
     @GetMapping("/stats")
-    public List<StatsDto> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+    public List<StatsDto> getStats(
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
@@ -38,7 +39,8 @@ public class StatsController {
         return statsService.getStats(start, end, uris, unique);
     }
 
-    private void validateDates(LocalDateTime start, LocalDateTime end) {
+    private void validateDates(LocalDateTime start,
+                               LocalDateTime end) {
         if (start.isAfter(end)) {
             throw new BadRequestException();
         }

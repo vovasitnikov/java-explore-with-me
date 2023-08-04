@@ -31,8 +31,10 @@ public class StatsClient {
         restTemplate.postForEntity(url, inputHitDto, Void.class);
     }
 
-    public List<StatsDto> getStats(LocalDateTime startLocalDateTime, LocalDateTime endLocalDateTime, String[] uris,
-            boolean unique) {
+    public List<StatsDto> getStats(LocalDateTime startLocalDateTime,
+                                   LocalDateTime endLocalDateTime,
+                                   String[] uris,
+                                   boolean unique) {
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String start = startLocalDateTime.format(outputFormatter);
         String end = endLocalDateTime.format(outputFormatter);

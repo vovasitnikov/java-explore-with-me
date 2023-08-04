@@ -49,7 +49,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryOutDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
+    public CategoryOutDto updateCategory(Long categoryId,
+                                         NewCategoryDto newCategoryDto) {
         Optional<Category> oldCategory = categoryRepository.findById(categoryId);
         if (oldCategory.isEmpty()) {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
@@ -75,7 +76,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryOutDto> getCategories(int from, int size) {
+    public List<CategoryOutDto> getCategories(int from,
+                                              int size) {
         PageRequest pagination = PageRequest.of(from / size,
                 size);
         List<Category> paginatedCategories = categoryRepository.findAll(pagination).getContent();

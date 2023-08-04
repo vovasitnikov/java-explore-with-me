@@ -23,13 +23,14 @@ public class PrivateRequestsController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public ParticipationRequestDto createRequest(@PathVariable Long userId, @RequestParam Long eventId) {
+    public ParticipationRequestDto createRequest(@PathVariable Long userId,
+                                                 @RequestParam Long eventId) {
         return requestService.createRequest(userId, eventId);
     }
 
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto cancelRequestByRequester(@PathVariable Long userId,
-            @PathVariable Long requestId) {
+                                                            @PathVariable Long requestId) {
         return requestService.cancelRequestByRequester(userId, requestId);
     }
 

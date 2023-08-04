@@ -28,7 +28,8 @@ public class PublicEventController {
     private final EventService eventService;
 
     @GetMapping("/{id}")
-    public EventOutDto getEvent(@PathVariable Long id, HttpServletRequest request) {
+    public EventOutDto getEvent(@PathVariable Long id,
+                                HttpServletRequest request) {
         statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
                 request.getRemoteAddr(),
                 LocalDateTime.now()));
@@ -40,10 +41,8 @@ public class PublicEventController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) Boolean paid,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-            LocalDateTime rangeStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-            LocalDateTime rangeEnd,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
             @RequestParam(defaultValue = "false") boolean onlyAvailable,
             @RequestParam(required = false) Sorting sort,
             @RequestParam(defaultValue = "0") int from,

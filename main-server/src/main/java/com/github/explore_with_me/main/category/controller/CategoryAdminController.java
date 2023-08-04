@@ -36,7 +36,8 @@ public class CategoryAdminController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}")
-    public CategoryOutDto updateCategory(@RequestBody @Valid NewCategoryDto newCategoryDto, @PathVariable Long id) {
+    public CategoryOutDto updateCategory(@RequestBody @Valid NewCategoryDto newCategoryDto,
+                                         @PathVariable Long id) {
         return categoryService.updateCategory(id, newCategoryDto);
     }
 }

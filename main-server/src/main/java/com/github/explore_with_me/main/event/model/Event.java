@@ -38,18 +38,21 @@ public class Event {
     @Column(name = "annotation")
     private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id",
+                referencedColumnName = "id")
     private Category category;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
     @Column(name = "description")
     private String description;
-    @Column(name = "event_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "event_date",
+            columnDefinition = "TIMESTAMP")
     private LocalDateTime eventDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id")
     private User initiator;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,
+               cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
     @Column(name = "paid")
@@ -71,6 +74,8 @@ public class Event {
     @Builder.Default
     @Column(name = "views")
     private Long views = 0L;
-    @ManyToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "event",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.PERSIST)
     private List<Compilation> compilations;
 }

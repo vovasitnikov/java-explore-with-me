@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 public class EventMapperImpl implements EventMapper {
 
     @Override
-    public Event updateEvent(Event eventForUpdate, Category categoryForUpdate, State eventStateForUpdate,
+    public Event updateEvent(Event eventForUpdate,
+                             Category categoryForUpdate,
+                             State eventStateForUpdate,
             UpdateEventUserDto updateEventUserDto) {
         if (updateEventUserDto.getStateAction() == null) {
             eventStateForUpdate = eventForUpdate.getState();

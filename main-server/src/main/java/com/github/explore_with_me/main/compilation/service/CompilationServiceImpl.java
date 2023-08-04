@@ -55,7 +55,8 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
+    public CompilationDto updateCompilation(Long compId,
+                                            UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilationForUpdate = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(String.format("Подборка с id= %s не найдена", compId)));
         if (updateCompilationRequest.getPinned() != null) {
@@ -87,7 +88,9 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
+    public List<CompilationDto> getCompilations(Boolean pinned,
+                                                int from,
+                                                int size) {
         PageRequest pageRequest = PageRequest.of(from / size,
                 size);
         List<CompilationDto> pagedCompilations = compilationRepository.findAllByPinned(pinned, pageRequest)
