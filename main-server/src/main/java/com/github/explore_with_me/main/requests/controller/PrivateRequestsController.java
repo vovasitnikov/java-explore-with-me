@@ -29,7 +29,7 @@ public class PrivateRequestsController {
 
     @PatchMapping("/{requestId}/cancel")
     public ParticipationRequestDto cancelRequestByRequester(@PathVariable Long userId,
-                                                            @PathVariable Long requestId) {
+            @PathVariable Long requestId) {
         return requestService.cancelRequestByRequester(userId, requestId);
     }
 

@@ -1,6 +1,5 @@
 package com.github.explore_with_me.main.category.service;
 
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
 import com.github.explore_with_me.main.category.dto.CategoryOutDto;
 import com.github.explore_with_me.main.category.dto.NewCategoryDto;
 import com.github.explore_with_me.main.category.mapper.CategoryMapper;
@@ -27,12 +26,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-/*        if (categoryRepository.existsById(category.getId())) {
-            categoryRepository.save(category);
-        } else {
-            throw new NotFoundException("Категория " + category.getId() + " не найдена");
-        }*/
-
         try {
             categoryRepository.save(category);
         } catch (Exception e) {
@@ -57,8 +50,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto) {
-        Optional<Category> oldCategory = Optional.ofNullable(categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена")));
+        Optional<Category> oldCategory = categoryRepository.findById(categoryId);
+        if (oldCategory.isEmpty()) {
+            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
+        }
         Category updatedCategory = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
         updatedCategory.setId(categoryId);
         try {
@@ -80,9 +75,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryOutDto> getCategories(PaginationParams paginationParams) {
-        PageRequest pagination = PageRequest.of(paginationParams.getFrom() / paginationParams.getSize(),
-                paginationParams.getSize());
+    public List<CategoryOutDto> getCategories(int from, int size) {
+        PageRequest pagination = PageRequest.of(from / size,
+                size);
         List<Category> paginatedCategories = categoryRepository.findAll(pagination).getContent();
         log.info("Получен список категорий= " + paginatedCategories);
         return categoryMapper.categoriesToCategoriesOutDto(paginatedCategories);
@@ -90,8 +85,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto getCategoryById(Long categoryId) {
-        Optional<Category> category = Optional.ofNullable(categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена")));
+        Optional<Category> category = categoryRepository.findById(categoryId);
+        if (category.isEmpty()) {
+            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
+        }
         CategoryOutDto categoryDto = categoryMapper.categoryToCategoryOutDto(category.get());
         log.info("Получена категория= " + category.get());
         return categoryDto;

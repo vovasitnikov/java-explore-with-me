@@ -1,11 +1,10 @@
 package com.github.explore_with_me.main.event.controller;
 
+import com.github.explore_with_me.main.event.dto.CommentDto;
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
 import com.github.explore_with_me.main.event.service.EventService;
-import com.github.explore_with_me.main.paramEntity.GetEventsParam;
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
 import com.github.explore_with_me.stats.client.StatsClient;
 import com.github.explore_with_me.stats.input_dto.InputHitDto;
 import java.time.LocalDateTime;
@@ -50,12 +49,14 @@ public class PublicEventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-        GetEventsParam getEventsParam = new GetEventsParam(text, categories, paid, rangeStart, rangeEnd, onlyAvailable,
-                sort);
-        PaginationParams pagination = new PaginationParams(from, size);
         statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
                 request.getRemoteAddr(),
                 LocalDateTime.now()));
-        return eventService.getEvents(getEventsParam, pagination);
+        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+    }
+
+    @GetMapping("/{id}/comments")
+    public List<CommentDto> getComments(@PathVariable Long id) {
+        return eventService.getEventComments(id);
     }
 }

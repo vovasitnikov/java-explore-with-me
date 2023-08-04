@@ -1,20 +1,22 @@
 package com.github.explore_with_me.main.event.controller;
 
+import com.github.explore_with_me.main.event.dto.CommentDto;
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateRequest;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateResult;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
+import com.github.explore_with_me.main.event.dto.InputCommentDto;
 import com.github.explore_with_me.main.event.dto.NewEventDto;
 import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
 import com.github.explore_with_me.main.event.service.EventService;
 import com.github.explore_with_me.main.exception.model.BadRequestException;
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,8 +44,8 @@ public class PrivateEventController {
 
     @GetMapping
     public List<EventShortDto> getUsersEvents(@PathVariable Long userId, @RequestParam(defaultValue = "0") int from,
-                                              @RequestParam(defaultValue = "10") int size) {
-        return eventService.getUserEvents(userId, new PaginationParams(from, size));
+            @RequestParam(defaultValue = "10") int size) {
+        return eventService.getUserEvents(userId, from, size);
     }
 
     @GetMapping("/{eventId}")
@@ -53,7 +55,7 @@ public class PrivateEventController {
 
     @PatchMapping("/{eventId}")
     public EventOutDto patchEvent(@PathVariable Long userId, @PathVariable Long eventId,
-                                  @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
+            @RequestBody @Valid UpdateEventUserDto updateEventUserDto) {
         if (updateEventUserDto.getEventDate() != null) {
             dateTimeValidate(updateEventUserDto.getEventDate());
         }
@@ -67,9 +69,28 @@ public class PrivateEventController {
 
     @PatchMapping("{eventId}/requests")
     public EventRequestStatusUpdateResult changeRequestsStatus(@PathVariable Long userId,
-                                                               @PathVariable Long eventId,
-                                                               @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
+            @PathVariable Long eventId, @RequestBody EventRequestStatusUpdateRequest statusUpdateRequest) {
         return eventService.changeRequestsStatus(userId, eventId, statusUpdateRequest);
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("{eventId}/comments")
+    public CommentDto createComment(@PathVariable Long eventId, @PathVariable Long userId, @RequestBody
+    @Valid InputCommentDto inputCommentDto) {
+        return eventService.createComment(inputCommentDto, userId, eventId);
+    }
+
+    @PatchMapping("{eventId}/comments/{commentId}")
+    public CommentDto patchComment(@PathVariable Long eventId, @PathVariable Long userId,
+            @RequestBody InputCommentDto inputCommentDto, @PathVariable Long commentId) {
+        return eventService.changeComment(inputCommentDto, userId, eventId, commentId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("{ignoredEventId}/comments/{commentId}")
+    public void deleteComment(@PathVariable Long userId,
+            @PathVariable Long commentId, @PathVariable Long ignoredEventId) {
+        eventService.removeByCommentIdAndAuthorId(commentId, userId);
     }
 
     private void dateTimeValidate(LocalDateTime localDateTime) {
