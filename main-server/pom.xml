@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.GitHub.Tor1ant</groupId>
+    <groupId>ru.practicum.vovasitnikov</groupId>
     <artifactId>main-server</artifactId>
 
     <properties>
@@ -23,7 +23,7 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.GitHub.Tor1ant</groupId>
+            <groupId>ru.practicum.vovasitnikov</groupId>
             <artifactId>stats-client</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
