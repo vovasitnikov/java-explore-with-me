@@ -33,25 +33,19 @@ create table if not exists public.events
     id integer generated always as identity constraint events_pk primary key,
     annotation varchar(2000) not null,
     category_id integer not null constraint events_categories_id_fk references public.categories on delete restrict,
-    description        varchar(7000)         not null,
-    event_date         timestamp             not null,
-    location_id        integer               not null
-        constraint events_locations_id_fk
-            references public.locations
-            on update cascade on delete cascade,
-    paid               boolean default false not null,
+    description varchar(7000) not null,
+    event_date timestamp not null,
+    location_id integer not null constraint events_locations_id_fk references public.locations on update cascade on delete cascade,
+    paid boolean default false not null,
     participant_limit  integer default 0,
     request_moderation boolean default true  not null,
-    title              varchar(120)          not null,
-    initiator_id       integer               not null
-        constraint events_users_id_fk
-            references public.users
-            on delete cascade,
-    created_on         timestamp             not null,
-    published_on       timestamp,
-    state              varchar(50),
+    title varchar(120) not null,
+    initiator_id integer not null constraint events_users_id_fk references public.users on delete cascade,
+    created_on timestamp not null,
+    published_on timestamp,
+    state varchar(50),
     confirmed_requests integer default 0,
-    views              integer default 0
+    views integer default 0
 );
 
 create table if not exists public.requests
