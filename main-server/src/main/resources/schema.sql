@@ -23,23 +23,16 @@ create table if not exists categories
 
 create table if not exists public.locations
 (
-    id  integer generated always as identity
-        constraint locations_pk
-            primary key,
+    id  integer generated always as identity constraint locations_pk primary key,
     lat double precision not null,
     lon double precision not null
 );
 
 create table if not exists public.events
 (
-    id                 integer generated always as identity
-        constraint events_pk
-            primary key,
-    annotation         varchar(2000)         not null,
-    category_id        integer               not null
-        constraint events_categories_id_fk
-            references public.categories
-            on delete restrict,
+    id integer generated always as identity constraint events_pk primary key,
+    annotation varchar(2000) not null,
+    category_id integer not null constraint events_categories_id_fk references public.categories on delete restrict,
     description        varchar(7000)         not null,
     event_date         timestamp             not null,
     location_id        integer               not null
