@@ -7,13 +7,13 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication()
-public class MainServiceApp {
-    public static void main(String[] args) {
+public class MainServiceApp{
+    public static void main(String[] args){
         SpringApplication.run(MainServiceApp.class, args);
     }
-    
+
     @Bean
-    StatsClient statClient() {
+    StatsClient statClient(){
         RestTemplateBuilder builder = new RestTemplateBuilder();
         return new StatsClient(builder);
     }
