@@ -280,9 +280,8 @@ public class EventServiceImpl implements EventService {
         }
         long eventStats = getViews(LocalDateTime
                 .of(1990, 1, 1, 1, 1), LocalDateTime.now(), uris, true);
-        event.setViews(eventStats);
-        event = eventRepository.save(event);
         EventOutDto eventOut = eventMapstructMapper.eventToEventOutDto(event);
+        eventOut.setViews(eventStats);
         log.info("Событие с id= " + eventId + " просмотрено");
         return eventOut;
     }
