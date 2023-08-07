@@ -5,7 +5,9 @@ import com.github.explore_with_me.main.exception.model.BadRequestException;
 import com.github.explore_with_me.main.exception.model.ConflictException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
 import java.time.LocalDateTime;
+
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -47,6 +49,13 @@ public class ExceptionAdviceHandler {
     public ApiError sendNotFoundException(NotFoundException notFoundException) {
         log.warn(notFoundException.getMessage(), notFoundException);
         return new ApiError(HttpStatus.NOT_FOUND.toString(), notFoundException.getMessage(), message,
+                LocalDateTime.now());
+    }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+        log.warn(e.getMessage(), e);
+        return new ApiError(HttpStatus.CONFLICT.toString(), e.getMessage(), message,
                 LocalDateTime.now());
     }
 }
