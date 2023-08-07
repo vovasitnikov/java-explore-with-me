@@ -12,7 +12,7 @@ public class MainServiceApp {
     public static void main(String[] args) {
         SpringApplication.run(MainServiceApp.class, args);
     }
-
+    //исправление замечания
     @Bean
     StatsClient statClient() {
         RestTemplateBuilder builder = new RestTemplateBuilder();
