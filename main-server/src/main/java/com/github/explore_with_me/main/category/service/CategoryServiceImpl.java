@@ -5,6 +5,7 @@ import com.github.explore_with_me.main.category.dto.NewCategoryDto;
 import com.github.explore_with_me.main.category.mapper.CategoryMapper;
 import com.github.explore_with_me.main.category.model.Category;
 import com.github.explore_with_me.main.category.repository.CategoryRepository;
+import com.github.explore_with_me.main.event.repository.EventRepository;
 import com.github.explore_with_me.main.exception.model.ConflictException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class CategoryServiceImpl implements CategoryService {
+    private final EventRepository eventRepository;
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
@@ -26,11 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto saveCategory(NewCategoryDto newCategoryDto) {
         Category category = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
-        try {
-            categoryRepository.save(category);
-        } catch (Exception e) {
-            handleConflictException(e);
-        }
+        categoryRepository.save(category);
         log.info("Категория= " + category + " сохранена");
         return categoryMapper.categoryToCategoryOutDto(category);
     }
@@ -40,11 +38,10 @@ public class CategoryServiceImpl implements CategoryService {
         if (!categoryRepository.existsById(categoryId)) {
             throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
         }
-        try {
-            categoryRepository.deleteById(categoryId);
-        } catch (Exception e) {
-            handleConflictException(e);
+        if(!eventRepository.findAllByCategoryId(categoryId).isEmpty()){
+            throw new ConflictException("Категорию удалить нельзя, так как существуют события из этой категории");
         }
+        categoryRepository.deleteById(categoryId);
         log.info("Категория с id= " + categoryId + " удалена");
     }
 
@@ -57,22 +54,10 @@ public class CategoryServiceImpl implements CategoryService {
         }
         Category updatedCategory = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
         updatedCategory.setId(categoryId);
-        try {
-            categoryRepository.save(updatedCategory);
-
-        } catch (Exception e) {
-            handleConflictException(e);
-        }
+        categoryRepository.save(updatedCategory);
         log.info("Категория с id= " + categoryId + " изменила название с = " + oldCategory.get().getName() + " на = "
                 + newCategoryDto.getName());
         return categoryMapper.categoryToCategoryOutDto(updatedCategory);
-    }
-
-    private void handleConflictException(Exception e) {
-        StringBuilder stringBuilder = new StringBuilder(e.getCause().getCause().getMessage());
-        int indexEqualsSign = stringBuilder.indexOf("=");
-        stringBuilder.delete(0, indexEqualsSign + 1);
-        throw new ConflictException(stringBuilder.toString().replace("\"", "").trim());
     }
 
     @Override

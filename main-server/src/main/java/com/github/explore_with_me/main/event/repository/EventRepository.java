@@ -40,10 +40,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSo
             + "and (:states is null or e.state in :states) "
             + "and (:categories is null or c.id in :categories)")
     List<Event> findEventsByEventParamAndPaginationParams(@Param("users") List<Long> users,
-            @Param("states") List<State> states,
-            @Param("categories") List<Long> categories, @Param("rangeStart") LocalDateTime rangeStart,
-            @Param("rangeEnd") LocalDateTime rangeEnd,
-            Pageable pageable);
+                                                          @Param("states") List<State> states,
+                                                          @Param("categories") List<Long> categories, @Param("rangeStart") LocalDateTime rangeStart,
+                                                          @Param("rangeEnd") LocalDateTime rangeEnd,
+                                                          Pageable pageable);
 
     @Query("select e from Event as e " +
             "join fetch e.initiator as i " +
@@ -81,4 +81,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSo
             @Param("rangeStart") LocalDateTime rangeStart,
             @Param("rangeEnd") LocalDateTime rangeEnd,
             Pageable pageRequest);
+
+    List<Event> findAllByCategoryId(Long categoryId);
 }
