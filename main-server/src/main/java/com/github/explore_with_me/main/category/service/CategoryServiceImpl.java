@@ -48,14 +48,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryOutDto updateCategory(Long categoryId,
                                          NewCategoryDto newCategoryDto) {
-        Optional<Category> oldCategory = categoryRepository.findById(categoryId);
-        if (oldCategory.isEmpty()) {
-            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
-        }
+        Category oldCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена"));
+
         Category updatedCategory = categoryMapper.newCategoryDtoToCategory(newCategoryDto);
         updatedCategory.setId(categoryId);
         categoryRepository.save(updatedCategory);
-        log.info("Категория с id= " + categoryId + " изменила название с = " + oldCategory.get().getName() + " на = "
+        log.info("Категория с id= " + categoryId + " изменила название с = " + oldCategory.getName() + " на = "
                 + newCategoryDto.getName());
         return categoryMapper.categoryToCategoryOutDto(updatedCategory);
     }
@@ -72,12 +71,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryOutDto getCategoryById(Long categoryId) {
-        Optional<Category> category = categoryRepository.findById(categoryId);
-        if (category.isEmpty()) {
-            throw new NotFoundException("Категория с id= " + categoryId + " не найдена");
-        }
-        CategoryOutDto categoryDto = categoryMapper.categoryToCategoryOutDto(category.get());
-        log.info("Получена категория= " + category.get());
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new NotFoundException("Категория с id= " + categoryId + " не найдена"));
+        CategoryOutDto categoryDto = categoryMapper.categoryToCategoryOutDto(category);
+        log.info("Получена категория= " + category);
         return categoryDto;
     }
 }
