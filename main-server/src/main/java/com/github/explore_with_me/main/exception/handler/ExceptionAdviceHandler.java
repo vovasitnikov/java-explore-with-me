@@ -51,10 +51,10 @@ public class ExceptionAdviceHandler {
         return new ApiError(HttpStatus.NOT_FOUND.toString(), notFoundException.getMessage(), message,
                 LocalDateTime.now());
     }
-    
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
+    public ApiError handleDataIntegrityViolationException(final DataIntegrityViolationException e){
         log.warn(e.getMessage(), e);
         return new ApiError(HttpStatus.CONFLICT.toString(), e.getMessage(), message,
                 LocalDateTime.now());
