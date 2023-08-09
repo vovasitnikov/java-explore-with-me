@@ -1,4 +1,4 @@
-package com.github.explore_with_me.main.event.dto;
+package com.github.explore_with_me.main.comment.dto;
 
 import java.time.LocalDateTime;
 import lombok.Data;

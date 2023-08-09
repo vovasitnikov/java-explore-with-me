@@ -45,10 +45,10 @@ public class AdminEventController {
         return eventService.findEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{ignoredEventId}/comments/{commentId}")
-    public void removeCommentByAdmin(@PathVariable Long ignoredEventId,
-                                     @PathVariable Long commentId) {
-        eventService.removeCommentById(commentId);
-    }
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @DeleteMapping("/{ignoredEventId}/comments/{commentId}")
+//    public void removeCommentByAdmin(@PathVariable Long ignoredEventId,
+//                                     @PathVariable Long commentId) {
+//        eventService.removeCommentById(commentId);
+//    }
 }

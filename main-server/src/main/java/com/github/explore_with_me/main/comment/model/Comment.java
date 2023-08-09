@@ -1,5 +1,6 @@
-package com.github.explore_with_me.main.event.model;
+package com.github.explore_with_me.main.comment.model;
 
+import com.github.explore_with_me.main.event.model.Event;
 import com.github.explore_with_me.main.user.model.User;
 import java.time.LocalDateTime;
 import javax.persistence.CascadeType;
@@ -34,13 +35,13 @@ public class Comment {
     @JoinColumn(name = "event_id",
                 referencedColumnName = "id",
                 nullable = false)
-    private Event event;
+    private Event  event;
     @ManyToOne(fetch = FetchType.LAZY,
                cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id",
                 referencedColumnName = "id",
                 nullable = false)
-    private User author;
+    private User   author;
     @Column(name = "created")
     private LocalDateTime created;
 }

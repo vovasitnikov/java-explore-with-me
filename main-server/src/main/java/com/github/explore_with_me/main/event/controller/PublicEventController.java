@@ -1,6 +1,6 @@
 package com.github.explore_with_me.main.event.controller;
 
-import com.github.explore_with_me.main.event.dto.CommentDto;
+import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
@@ -23,17 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PublicEventController {
 
-    private final StatsClient statsClient;
+//    private final StatsClient statsClient;
 
     private final EventService eventService;
 
     @GetMapping("/{id}")
     public EventOutDto getEvent(@PathVariable Long id,
                                 HttpServletRequest request) {
-        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
-                request.getRemoteAddr(),
-                LocalDateTime.now()));
-        return eventService.getEvent(id, new String[]{request.getRequestURI()});
+//        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
+//                request.getRemoteAddr(),
+//                LocalDateTime.now()));
+        return eventService.getEvent(id, request);
     }
 
     @GetMapping
@@ -48,14 +48,16 @@ public class PublicEventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
-                request.getRemoteAddr(),
-                LocalDateTime.now()));
-        return eventService.getEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
+//        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
+//                request.getRemoteAddr(),
+//                LocalDateTime.now()));
+        return eventService.getEvents(request, text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
     @GetMapping("/{id}/comments")
-    public List<CommentDto> getComments(@PathVariable Long id) {
-        return eventService.getEventComments(id);
+    public List<CommentDto> getComments(@PathVariable Long id,
+                                        @RequestParam(defaultValue = "0") int from,
+                                        @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventComments(id, from, size);
     }
 }

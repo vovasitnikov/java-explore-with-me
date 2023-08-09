@@ -37,21 +37,22 @@ public class StatsServiceImpl implements StatsService {
                                    LocalDateTime end,
                                    List<String> uris,
                                    boolean unique) {
-        List<StatsDto> stats = new ArrayList<>();
-
-        if (unique && uris != null) {
-            stats = hitRepository.getUniqueStatsByUrisAndTimestamps(start, end, uris);
+        if (unique) {
+            if (uris != null && !uris.isEmpty()) {
+                uris.replaceAll(s -> s.replace("[", ""));
+                uris.replaceAll(s -> s.replace("]", ""));
+                return hitRepository.getUniqueStatsByUrisAndTimestamps(start, end, uris);
+            } else {
+                return hitRepository.getAllUniqueStats(start, end);
+            }
+        } else {
+            if (uris != null && !uris.isEmpty()) {
+                uris.replaceAll(s -> s.replace("[", ""));
+                uris.replaceAll(s -> s.replace("]", ""));
+                return hitRepository.getStatsByUrisAndTimestamps(start, end, uris);
+            } else {
+                return hitRepository.getAllStats(start, end);
+            }
         }
-        if (!unique && uris != null) {
-            stats = hitRepository.getStatsByUrisAndTimestamps(start, end, uris);
-        }
-        if (!unique && uris == null) {
-            stats = hitRepository.getAllStats(start, end);
-        }
-        if (unique && uris == null) {
-            stats = hitRepository.getAllUniqueStats(start, end);
-        }
-        log.info("Статистика по просмотру событий получена= " + stats);
-        return stats;
     }
 }

@@ -83,4 +83,5 @@ public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSo
             Pageable pageRequest);
 
     List<Event> findAllByCategoryId(Long categoryId);
+    Optional<Event> findByIdAndState(Long id, String state);
 }

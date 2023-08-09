@@ -1,11 +1,11 @@
 package com.github.explore_with_me.main.event.controller;
 
-import com.github.explore_with_me.main.event.dto.CommentDto;
+import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateRequest;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateResult;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
-import com.github.explore_with_me.main.event.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.dto.InputCommentDto;
 import com.github.explore_with_me.main.event.dto.NewEventDto;
 import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
 import com.github.explore_with_me.main.event.service.EventService;
@@ -79,29 +79,29 @@ public class PrivateEventController {
         return eventService.changeRequestsStatus(userId, eventId, statusUpdateRequest);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("{eventId}/comments")
-    public CommentDto createComment(@PathVariable Long eventId,
-                                    @PathVariable Long userId,
-                                    @RequestBody @Valid InputCommentDto inputCommentDto) {
-        return eventService.createComment(inputCommentDto, userId, eventId);
-    }
+//    @ResponseStatus(HttpStatus.CREATED)
+//    @PostMapping("{eventId}/comments")
+//    public CommentDto createComment(@PathVariable Long eventId,
+//                                    @PathVariable Long userId,
+//                                    @RequestBody @Valid InputCommentDto inputCommentDto) {
+//        return eventService.createComment(inputCommentDto, userId, eventId);
+//    }
 
-    @PatchMapping("{eventId}/comments/{commentId}")
-    public CommentDto patchComment(@PathVariable Long eventId,
-                                   @PathVariable Long userId,
-                                   @RequestBody InputCommentDto inputCommentDto,
-                                   @PathVariable Long commentId) {
-        return eventService.changeComment(inputCommentDto, userId, eventId, commentId);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("{ignoredEventId}/comments/{commentId}")
-    public void deleteComment(@PathVariable Long userId,
-                              @PathVariable Long commentId,
-                              @PathVariable Long ignoredEventId) {
-        eventService.removeByCommentIdAndAuthorId(commentId, userId);
-    }
+//    @PatchMapping("{eventId}/comments/{commentId}")
+//    public CommentDto patchComment(@PathVariable Long eventId,
+//                                   @PathVariable Long userId,
+//                                   @RequestBody InputCommentDto inputCommentDto,
+//                                   @PathVariable Long commentId) {
+//        return eventService.changeComment(inputCommentDto, userId, eventId, commentId);
+//    }
+//
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    @DeleteMapping("{ignoredEventId}/comments/{commentId}")
+//    public void deleteComment(@PathVariable Long userId,
+//                              @PathVariable Long commentId,
+//                              @PathVariable Long ignoredEventId) {
+//        eventService.removeByCommentIdAndAuthorId(commentId, userId);
+//    }
 
     private void dateTimeValidate(LocalDateTime localDateTime) {
         if (localDateTime.isBefore(LocalDateTime.now().plusHours(2))) {

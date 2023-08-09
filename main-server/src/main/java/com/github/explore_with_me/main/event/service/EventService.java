@@ -1,16 +1,18 @@
 package com.github.explore_with_me.main.event.service;
 
-import com.github.explore_with_me.main.event.dto.CommentDto;
+import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateRequest;
 import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateResult;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
-import com.github.explore_with_me.main.event.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.dto.InputCommentDto;
 import com.github.explore_with_me.main.event.dto.NewEventDto;
 import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
 import com.github.explore_with_me.main.event.enumerated.State;
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
+
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,9 +43,10 @@ public interface EventService {
                                      UpdateEventUserDto updateEventUserDto);
 
     EventOutDto getEvent(Long eventId,
-                         String[] uris);
+                         HttpServletRequest request);
 
-    List<EventShortDto> getEvents(String text,
+    List<EventShortDto> getEvents(HttpServletRequest request,
+                                  String text,
                                   List<Long> categories,
                                   Boolean paid,
                                   LocalDateTime rangeStart,
@@ -59,19 +62,5 @@ public interface EventService {
                                         Integer from,
                                         Integer size);
 
-    CommentDto createComment(InputCommentDto inputCommentDto,
-                             Long authorId,
-                             Long eventId);
-
-    List<CommentDto> getEventComments(Long eventId);
-
-    CommentDto changeComment(InputCommentDto inputCommentDto,
-                             Long authorId,
-                             Long eventId,
-                             Long commentId);
-
-    void removeByCommentIdAndAuthorId(Long commentId,
-                                      Long authorId);
-
-    void removeCommentById(Long commentId);
+    List<CommentDto> getEventComments(Long eventId, Integer from, Integer size);
 }

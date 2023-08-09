@@ -5,7 +5,11 @@ import com.github.explore_with_me.stats.exception.BadRequestException;
 import com.github.explore_with_me.stats.input_dto.InputHitDto;
 import com.github.explore_with_me.stats.output_dto.StatsDto;
 import com.github.explore_with_me.stats.service.StatsService;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,12 +35,15 @@ public class StatsController {
 
     @GetMapping("/stats")
     public List<StatsDto> getStats(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+            @RequestParam  String start,
+            @RequestParam  String end,
             @RequestParam(required = false) List<String> uris,
             @RequestParam(defaultValue = "false") boolean unique) {
-        validateDates(start, end);
-        return statsService.getStats(start, end, uris, unique);
+        LocalDateTime startParsed = LocalDateTime.parse(URLDecoder.decode(start, StandardCharsets.UTF_8),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDateTime endParsed = LocalDateTime.parse(URLDecoder.decode(end, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        validateDates(startParsed, endParsed);
+        return statsService.getStats(startParsed, endParsed, uris, unique);
     }
 
     private void validateDates(LocalDateTime start,
