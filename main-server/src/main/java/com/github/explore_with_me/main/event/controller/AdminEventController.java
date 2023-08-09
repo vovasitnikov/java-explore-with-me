@@ -36,11 +36,4 @@ public class AdminEventController {
             @RequestParam(defaultValue = "10") Integer size) {
         return eventService.findEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
-
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    @DeleteMapping("/{ignoredEventId}/comments/{commentId}")
-//    public void removeCommentByAdmin(@PathVariable Long ignoredEventId,
-//                                     @PathVariable Long commentId) {
-//        eventService.removeCommentById(commentId);
-//    }
 }

@@ -98,7 +98,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"тестовый комментарий\"\r\n}",
+					"raw": "{\r\n    \"text\": \"тестовый комментарий для события\",\r\n \"eventId\": \"{{eid}}\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -106,7 +106,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/events/:eventId/comments",
+					"raw": "http://localhost:8080/users/:userId/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -115,8 +115,6 @@
 					"path": [
 						"users",
 						":userId",
-						"events",
-						":eventId",
 						"comments"
 					],
 					"variable": [
@@ -124,11 +122,6 @@
 							"key": "userId",
 							"value": "{{uid}}",
 							"description": "Id пользователя"
-						},
-						{
-							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
 						}
 					]
 				}
@@ -209,7 +202,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Измененный тестовый комментарий\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Измененный тестовый комментарий\"\r\n, \"eventId\": \"{{eid}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -217,7 +210,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/events/:eventId/comments/1",
+					"raw": "http://localhost:8080/users/:userId/comments/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -236,11 +229,6 @@
 							"key": "userId",
 							"value": "{{uid}}",
 							"description": "id пользователя"
-						},
-						{
-							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
 						}
 					]
 				}
@@ -387,7 +375,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"Измененный тестовый комментарий\"\r\n}",
+					"raw": "{\r\n    \"text\": \"Измененный тестовый комментарий\"\r\n, \"eventId\": \"{{eid}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -395,7 +383,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/events/:eventId/comments/1",
+					"raw": "http://localhost:8080/users/:userId/comments/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -414,11 +402,6 @@
 							"key": "userId",
 							"value": "{{uid}}",
 							"description": "id пользователя"
-						},
-						{
-							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
 						}
 					]
 				}
@@ -482,7 +465,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"text\": \"тестовый комментарий\"\r\n}",
+					"raw": "{\r\n    \"text\": \"тестовый комментарий\"\r\n, \"eventId\": \"{{eid}}\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -490,7 +473,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/users/:userId/events/:eventId/comments",
+					"raw": "http://localhost:8080/users/:userId/comments",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -508,11 +491,6 @@
 							"key": "userId",
 							"value": "{{uid}}",
 							"description": "id пользователя"
-						},
-						{
-							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
 						}
 					]
 				}
@@ -568,7 +546,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/admin/events/:eventId/comments/2",
+					"raw": "http://localhost:8080/admin/comments/2",
 					"protocol": "http",
 					"host": [
 						"localhost"

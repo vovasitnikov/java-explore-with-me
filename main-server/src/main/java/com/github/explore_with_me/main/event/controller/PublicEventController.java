@@ -25,9 +25,6 @@ public class PublicEventController {
     @GetMapping("/{id}")
     public EventOutDto getEvent(@PathVariable Long id,
                                 HttpServletRequest request) {
-//        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
-//                request.getRemoteAddr(),
-//                LocalDateTime.now()));
         return eventService.getEvent(id, request);
     }
 
@@ -43,9 +40,6 @@ public class PublicEventController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
-//        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
-//                request.getRemoteAddr(),
-//                LocalDateTime.now()));
         return eventService.getEvents(request, text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
