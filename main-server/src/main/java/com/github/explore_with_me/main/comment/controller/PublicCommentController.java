@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 @RestController()
 @RequestMapping("/users/{userId}/comments")
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class PublicCommentController {
 
     @GetMapping("/{commentId}")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto getCommentById(@PathVariable Long commentId){
+    public CommentDto getCommentById(@PathVariable Long commentId) {
         return commentService.getCommentById(commentId);
     }
 }

@@ -4,8 +4,6 @@ import com.github.explore_with_me.main.exception.model.ApiError;
 import com.github.explore_with_me.main.exception.model.BadRequestException;
 import com.github.explore_with_me.main.exception.model.ConflictException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
-import java.time.LocalDateTime;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -13,6 +11,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
 @Slf4j

@@ -5,18 +5,13 @@ import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
 import com.github.explore_with_me.main.event.service.EventService;
-import com.github.explore_with_me.stats.client.StatsClient;
-import com.github.explore_with_me.stats.input_dto.InputHitDto;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/events")

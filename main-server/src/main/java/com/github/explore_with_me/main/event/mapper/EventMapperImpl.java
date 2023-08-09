@@ -2,8 +2,8 @@ package com.github.explore_with_me.main.event.mapper;
 
 import com.github.explore_with_me.main.category.model.Category;
 import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
-import com.github.explore_with_me.main.event.model.Event;
 import com.github.explore_with_me.main.event.enumerated.State;
+import com.github.explore_with_me.main.event.model.Event;
 import org.springframework.stereotype.Component;
 
 @Component
