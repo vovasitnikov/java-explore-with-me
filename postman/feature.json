@@ -219,8 +219,6 @@
 					"path": [
 						"users",
 						":userId",
-						"events",
-						":eventId",
 						"comments",
 						"1"
 					],
@@ -392,8 +390,6 @@
 					"path": [
 						"users",
 						":userId",
-						"events",
-						":eventId",
 						"comments",
 						"1"
 					],
@@ -482,8 +478,6 @@
 					"path": [
 						"users",
 						":userId",
-						"events",
-						":eventId",
 						"comments"
 					],
 					"variable": [
@@ -545,28 +539,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:8080/admin/comments/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"admin",
-						"events",
-						":eventId",
-						"comments",
-						"2"
-					],
-					"variable": [
-						{
-							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
-						}
-					]
-				}
+				"url": "http://localhost:8080/admin/comments/2"
 			},
 			"response": []
 		}
