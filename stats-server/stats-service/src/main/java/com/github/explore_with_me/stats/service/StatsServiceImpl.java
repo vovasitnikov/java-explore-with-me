@@ -5,7 +5,6 @@ import com.github.explore_with_me.stats.model.Hit;
 import com.github.explore_with_me.stats.output_dto.StatsDto;
 import com.github.explore_with_me.stats.repository.HitRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
