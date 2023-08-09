@@ -1,13 +1,7 @@
 package com.github.explore_with_me.main.event.service;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
-import com.github.explore_with_me.main.event.dto.EventOutDto;
-import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateRequest;
-import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateResult;
-import com.github.explore_with_me.main.event.dto.EventShortDto;
-import com.github.explore_with_me.main.comment.dto.InputCommentDto;
-import com.github.explore_with_me.main.event.dto.NewEventDto;
-import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
+import com.github.explore_with_me.main.event.dto.*;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
 import com.github.explore_with_me.main.event.enumerated.State;
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;

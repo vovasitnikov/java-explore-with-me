@@ -12,12 +12,13 @@ import com.github.explore_with_me.main.requests.repository.RequestRepository;
 import com.github.explore_with_me.main.requests.status.Status;
 import com.github.explore_with_me.main.user.model.User;
 import com.github.explore_with_me.main.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

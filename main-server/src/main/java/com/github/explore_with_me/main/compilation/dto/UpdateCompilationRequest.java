@@ -1,10 +1,11 @@
 package com.github.explore_with_me.main.compilation.dto;
 
-import java.util.Set;
-import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor(force = true)

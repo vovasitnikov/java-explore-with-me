@@ -1,8 +1,8 @@
 package com.github.explore_with_me.main.comment.controller;
 
-import com.github.explore_with_me.main.comment.service.CommentService;
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

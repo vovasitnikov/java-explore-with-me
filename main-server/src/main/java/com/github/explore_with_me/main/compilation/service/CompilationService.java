@@ -3,6 +3,7 @@ package com.github.explore_with_me.main.compilation.service;
 import com.github.explore_with_me.main.compilation.dto.CompilationDto;
 import com.github.explore_with_me.main.compilation.dto.NewCompilationDto;
 import com.github.explore_with_me.main.compilation.dto.UpdateCompilationRequest;
+
 import java.util.List;
 
 public interface CompilationService {

@@ -3,9 +3,10 @@ package com.github.explore_with_me.main.event.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.github.explore_with_me.main.category.dto.CategoryOutDto;
 import com.github.explore_with_me.main.user.dto.UserDto;
-import java.time.LocalDateTime;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor

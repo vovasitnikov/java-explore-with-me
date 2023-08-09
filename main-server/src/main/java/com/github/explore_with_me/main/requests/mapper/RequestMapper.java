@@ -2,9 +2,10 @@ package com.github.explore_with_me.main.requests.mapper;
 
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
 import com.github.explore_with_me.main.requests.model.Request;
-import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface RequestMapper {

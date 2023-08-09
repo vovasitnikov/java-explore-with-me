@@ -1,7 +1,8 @@
 package com.github.explore_with_me.main.comment.dto;
 
-import java.time.LocalDateTime;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 @Data
 public class CommentDto {

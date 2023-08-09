@@ -5,12 +5,13 @@ import com.github.explore_with_me.main.user.dto.UserDto;
 import com.github.explore_with_me.main.user.mapper.UserMapper;
 import com.github.explore_with_me.main.user.model.User;
 import com.github.explore_with_me.main.user.repository.UserRepository;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor

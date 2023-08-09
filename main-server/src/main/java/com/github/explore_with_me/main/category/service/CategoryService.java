@@ -2,6 +2,7 @@ package com.github.explore_with_me.main.category.service;
 
 import com.github.explore_with_me.main.category.dto.CategoryOutDto;
 import com.github.explore_with_me.main.category.dto.NewCategoryDto;
+
 import java.util.List;
 
 public interface CategoryService {

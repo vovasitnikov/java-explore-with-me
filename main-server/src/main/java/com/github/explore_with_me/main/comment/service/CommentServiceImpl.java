@@ -2,9 +2,9 @@ package com.github.explore_with_me.main.comment.service;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.model.Comment;
 import com.github.explore_with_me.main.event.enumerated.State;
 import com.github.explore_with_me.main.event.mapper.CommentMapper;
-import com.github.explore_with_me.main.comment.model.Comment;
 import com.github.explore_with_me.main.event.model.Event;
 import com.github.explore_with_me.main.event.repository.CommentRepository;
 import com.github.explore_with_me.main.event.repository.EventRepository;

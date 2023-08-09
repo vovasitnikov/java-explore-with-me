@@ -4,12 +4,13 @@ import com.github.explore_with_me.main.compilation.dto.CompilationDto;
 import com.github.explore_with_me.main.compilation.dto.NewCompilationDto;
 import com.github.explore_with_me.main.compilation.model.Compilation;
 import com.github.explore_with_me.main.event.model.Event;
-import java.util.ArrayList;
-import java.util.List;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class CompilationMapper {

@@ -1,6 +1,7 @@
 package com.github.explore_with_me.main.requests.service;
 
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
+
 import java.util.List;
 
 public interface RequestService {
