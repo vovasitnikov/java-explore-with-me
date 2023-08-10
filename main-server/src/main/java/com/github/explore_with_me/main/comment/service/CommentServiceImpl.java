@@ -102,7 +102,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void removeCommentById(Long commentId) {
-        if (!commentRepository.existsById(commentId)){
+        if (!commentRepository.existsById(commentId)) {
             throw new NotFoundException(String.format("Комментарий с id= %s не найден", commentId));
         }
         commentRepository.deleteById(commentId);

@@ -1,6 +1,6 @@
 package com.github.explore_with_me.main.event.controller;
 
-import com.github.explore_with_me.main.comment.dto.CommentDto;
+
 import com.github.explore_with_me.main.event.dto.EventOutDto;
 import com.github.explore_with_me.main.event.dto.EventShortDto;
 import com.github.explore_with_me.main.event.enumerated.Sorting;

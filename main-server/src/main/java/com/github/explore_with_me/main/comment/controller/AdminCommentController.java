@@ -1,7 +1,6 @@
 package com.github.explore_with_me.main.comment.controller;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
-import com.github.explore_with_me.main.comment.dto.InputCommentDto;
 import com.github.explore_with_me.main.comment.dto.UpdateCommentDto;
 import com.github.explore_with_me.main.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
