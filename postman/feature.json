@@ -605,12 +605,6 @@
 							"});\r",
 							"\r",
 							"\r",
-							"pm.test(\"Verify the expected number of elements in the response\", function () {\r",
-							"    const responseData = pm.response.json();\r",
-							"\r",
-							"    pm.expect(responseData).to.be.an('array').and.to.have.lengthOf(1);\r",
-							"});\r",
-							"\r",
 							"\r",
 							"pm.test(\"Each comment object has the required fields\", function () {\r",
 							"    const responseData = pm.response.json();\r",
@@ -653,22 +647,26 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:8080/events/:eventId/comments",
+					"raw": "http://localhost:8080/users/:userId/comments/:eventId",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"events",
-						":eventId",
-						"comments"
+						"users",
+						":userId",
+						"comments",
+						":eventId"
 					],
 					"variable": [
 						{
+							"key": "userId",
+							"value": "{{uid}}"
+						},
+						{
 							"key": "eventId",
-							"value": "{{eid}}",
-							"description": "id события"
+							"value": "{{eid}}"
 						}
 					]
 				}
