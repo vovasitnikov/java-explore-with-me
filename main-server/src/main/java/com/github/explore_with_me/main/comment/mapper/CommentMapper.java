@@ -1,4 +1,4 @@
-package com.github.explore_with_me.main.event.mapper;
+package com.github.explore_with_me.main.comment.mapper;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.model.Comment;

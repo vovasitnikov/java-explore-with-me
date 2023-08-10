@@ -1,40 +1,27 @@
 package com.github.explore_with_me.main.comment.controller;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
-import com.github.explore_with_me.main.comment.dto.InputCommentDto;
 import com.github.explore_with_me.main.comment.service.CommentService;
+import com.github.explore_with_me.main.event.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.List;
 
 @RestController()
-@RequestMapping("/users/{userId}/comments")
+@RequestMapping("comments")
 @RequiredArgsConstructor
 public class PublicCommentController {
 
+    private final EventService   eventService;
     private final CommentService commentService;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
-    public CommentDto createComment(@PathVariable Long userId,
-                                    @RequestBody @Valid InputCommentDto inputCommentDto) {
-        return commentService.createComment(inputCommentDto, userId, inputCommentDto.getEventId());
-    }
-
-    @PatchMapping("/{commentId}")
-    public CommentDto patchComment(@PathVariable Long userId,
-                                   @RequestBody InputCommentDto inputCommentDto,
-                                   @PathVariable Long commentId) {
-        return commentService.changeComment(inputCommentDto, userId, inputCommentDto.getEventId(), commentId);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{commentId}")
-    public void deleteComment(@PathVariable Long userId,
-                              @PathVariable Long commentId) {
-        commentService.removeByCommentIdAndAuthorId(commentId, userId);
+    @GetMapping("/events/{id}")
+    public List<CommentDto> getComments(@PathVariable Long id,
+                                        @RequestParam(defaultValue = "0") int from,
+                                        @RequestParam(defaultValue = "10") int size) {
+        return eventService.getEventComments(id, from, size);
     }
 
     @GetMapping("/{commentId}")

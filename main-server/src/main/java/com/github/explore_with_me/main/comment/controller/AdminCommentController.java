@@ -2,6 +2,7 @@ package com.github.explore_with_me.main.comment.controller;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.dto.UpdateCommentDto;
 import com.github.explore_with_me.main.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,9 @@ public class AdminCommentController {
         commentService.removeCommentById(commentId);
     }
 
-    @PatchMapping("/{commentId}")
-    public CommentDto patchComment(@PathVariable Long userId,
-                                   @RequestBody InputCommentDto inputCommentDto,
-                                   @PathVariable Long commentId) {
-        return commentService.changeComment(inputCommentDto, commentId);
+    @PatchMapping
+    public CommentDto patchComment(@RequestBody UpdateCommentDto updateCommentDto) {
+        return commentService.changeComment(updateCommentDto);
     }
 
 }

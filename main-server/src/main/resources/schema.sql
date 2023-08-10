@@ -85,5 +85,6 @@ create table if not exists public.comments
     text varchar(700) not null,
     author_id integer not null constraint comments_users_id_fk references public.users on update cascade on delete cascade,
     created   timestamp not null,
+    updated_at timestamp,
     event_id  integer not null constraint comments_events_id_fk references public.events on update cascade on delete cascade
 );

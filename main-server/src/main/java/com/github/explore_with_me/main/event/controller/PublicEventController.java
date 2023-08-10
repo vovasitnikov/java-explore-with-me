@@ -18,8 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicEventController {
 
-//    private final StatsClient statsClient;
-
     private final EventService eventService;
 
     @GetMapping("/{id}")
@@ -43,10 +41,10 @@ public class PublicEventController {
         return eventService.getEvents(request, text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size);
     }
 
-    @GetMapping("/{id}/comments")
-    public List<CommentDto> getComments(@PathVariable Long id,
-                                        @RequestParam(defaultValue = "0") int from,
-                                        @RequestParam(defaultValue = "10") int size) {
-        return eventService.getEventComments(id, from, size);
-    }
+//    @GetMapping("/{id}/comments")
+//    public List<CommentDto> getComments(@PathVariable Long id,
+//                                        @RequestParam(defaultValue = "0") int from,
+//                                        @RequestParam(defaultValue = "10") int size) {
+//        return eventService.getEventComments(id, from, size);
+//    }
 }

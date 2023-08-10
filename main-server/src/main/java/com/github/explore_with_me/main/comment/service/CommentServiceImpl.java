@@ -2,11 +2,12 @@ package com.github.explore_with_me.main.comment.service;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.dto.UpdateCommentDto;
+import com.github.explore_with_me.main.comment.mapper.CommentMapper;
 import com.github.explore_with_me.main.comment.model.Comment;
+import com.github.explore_with_me.main.comment.repository.CommentRepository;
 import com.github.explore_with_me.main.event.enumerated.State;
-import com.github.explore_with_me.main.event.mapper.CommentMapper;
 import com.github.explore_with_me.main.event.model.Event;
-import com.github.explore_with_me.main.event.repository.CommentRepository;
 import com.github.explore_with_me.main.event.repository.EventRepository;
 import com.github.explore_with_me.main.exception.model.BadRequestException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
@@ -42,7 +43,7 @@ public class CommentServiceImpl implements CommentService {
         if (event.getState() != State.PUBLISHED) {
             throw new NotFoundException(String.format("Событие с id= %s не найдено", eventId));
         }
-        Comment newComment = new Comment(null, inputCommentDto.getText(), event, user, LocalDateTime.now());
+        Comment newComment = new Comment(null, inputCommentDto.getText(), event, user, LocalDateTime.now(), null);
         newComment = commentRepository.save(newComment);
         log.info(String.format("Пользователь с id= %s добавил новый комментарий= %s", authorId, newComment));
         return commentMapper.commentToCommentDto(newComment);
@@ -57,10 +58,10 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public CommentDto changeComment(InputCommentDto inputCommentDto,
-                                    Long authorId,
-                                    Long eventId,
-                                    Long commentId) {
+    public CommentDto changeComment(UpdateCommentDto updateCommentDto,
+                                    Long authorId) {
+        Long eventId   = updateCommentDto.getEventId();
+        Long commentId = updateCommentDto.getCommentId();
         if (!userRepository.existsById(authorId)) {
             throw new NotFoundException("Пользователь с id= " + authorId + " не найден");
         }
@@ -77,7 +78,8 @@ public class CommentServiceImpl implements CommentService {
         if (LocalDateTime.now().isAfter(commentToChange.getCreated().plusDays(1))) {
             throw new BadRequestException("Вы не можете изменять комментарии, которые оставлены более 24 часов назад");
         }
-        commentToChange.setText(inputCommentDto.getText());
+        commentToChange.setText(updateCommentDto.getText());
+        commentToChange.setUpdated(LocalDateTime.now());
         commentToChange = commentRepository.save(commentToChange);
         log.info(String.format("Комментарий с id= %s изменён", commentId));
         return commentMapper.commentToCommentDto(commentToChange);
@@ -100,15 +102,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void removeCommentById(Long commentId) {
+        if (!commentRepository.existsById(commentId)){
+            throw new NotFoundException(String.format("Комментарий с id= %s не найден", commentId));
+        }
         commentRepository.deleteById(commentId);
         log.info(String.format("Комментарий с id= %s удалён", commentId));
     }
 
     @Override
-    public CommentDto changeComment(InputCommentDto inputCommentDto, Long commentId) {
+    public CommentDto changeComment(UpdateCommentDto updateCommentDto) {
+        Long commentId = updateCommentDto.getCommentId();
         Comment commentToChange = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(String.format("Комментарий с id= %s не найден", commentId)));
-        commentToChange.setText(inputCommentDto.getText());
+        commentToChange.setText(updateCommentDto.getText());
         commentToChange = commentRepository.save(commentToChange);
         log.info(String.format("Комментарий с id= %s изменён", commentId));
         return commentMapper.commentToCommentDto(commentToChange);
@@ -119,5 +125,11 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(String.format("Комментарий с id= %s не найден", commentId)));
         return commentMapper.commentToCommentDto(comment);
+    }
+
+    @Override
+    public List<CommentDto> getUserCommentsByEventId(Long userId, Long eventId) {
+        List<Comment> commentsByUserIdAndEventId = commentRepository.findAllByEventIdAndUserId(userId, eventId);
+        return commentMapper.commentToCommentDto(commentsByUserIdAndEventId);
     }
 }

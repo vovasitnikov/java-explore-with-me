@@ -36,4 +36,6 @@ public class Comment {
     private User   author;
     @Column(name = "created")
     private LocalDateTime created;
+    @Column(name = "updatedAt")
+    private LocalDateTime updated;
 }

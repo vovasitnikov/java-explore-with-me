@@ -2,6 +2,7 @@ package com.github.explore_with_me.main.comment.service;
 
 import com.github.explore_with_me.main.comment.dto.CommentDto;
 import com.github.explore_with_me.main.comment.dto.InputCommentDto;
+import com.github.explore_with_me.main.comment.dto.UpdateCommentDto;
 
 import java.util.List;
 
@@ -13,16 +14,16 @@ public interface CommentService {
 
     List<CommentDto> getEventComments(Long eventId);
 
-    CommentDto changeComment(InputCommentDto inputCommentDto,
-                             Long authorId,
-                             Long eventId,
-                             Long commentId);
+    CommentDto changeComment(UpdateCommentDto updateCommentDto,
+                             Long authorIdd);
 
     void removeByCommentIdAndAuthorId(Long commentId, Long authorId);
 
     void removeCommentById(Long commentId);
 
-    CommentDto changeComment(InputCommentDto inputCommentDto, Long commentId);
+    CommentDto changeComment(UpdateCommentDto updateCommentDto);
 
     CommentDto getCommentById(Long commentId);
+
+    List<CommentDto> getUserCommentsByEventId(Long userId, Long eventId);
 }
