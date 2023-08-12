@@ -1,7 +1,6 @@
 package com.github.explore_with_me.main.compilation.repository;
 
 import com.github.explore_with_me.main.compilation.model.Compilation;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,10 +8,11 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CompilationRepository extends JpaRepository<Compilation, Long>,
-        PagingAndSortingRepository<Compilation, Long> {
-
+                                               PagingAndSortingRepository<Compilation, Long> {
     @Query("select c from Compilation as c "
             + "left join fetch c.event as e "
             + "where c.pinned = :pinned")

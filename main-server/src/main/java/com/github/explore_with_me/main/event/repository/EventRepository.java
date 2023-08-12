@@ -2,15 +2,16 @@ package com.github.explore_with_me.main.event.repository;
 
 import com.github.explore_with_me.main.event.enumerated.State;
 import com.github.explore_with_me.main.event.model.Event;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSortingRepository<Event, Long> {
@@ -40,10 +41,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSo
             + "and (:states is null or e.state in :states) "
             + "and (:categories is null or c.id in :categories)")
     List<Event> findEventsByEventParamAndPaginationParams(@Param("users") List<Long> users,
-            @Param("states") List<State> states,
-            @Param("categories") List<Long> categories, @Param("rangeStart") LocalDateTime rangeStart,
-            @Param("rangeEnd") LocalDateTime rangeEnd,
-            Pageable pageable);
+                                                          @Param("states") List<State> states,
+                                                          @Param("categories") List<Long> categories, @Param("rangeStart") LocalDateTime rangeStart,
+                                                          @Param("rangeEnd") LocalDateTime rangeEnd,
+                                                          Pageable pageable);
 
     @Query("select e from Event as e " +
             "join fetch e.initiator as i " +
@@ -81,4 +82,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, PagingAndSo
             @Param("rangeStart") LocalDateTime rangeStart,
             @Param("rangeEnd") LocalDateTime rangeEnd,
             Pageable pageRequest);
+
+    List<Event> findAllByCategoryId(Long categoryId);
+
+    Optional<Event> findByIdAndState(Long id, String state);
 }

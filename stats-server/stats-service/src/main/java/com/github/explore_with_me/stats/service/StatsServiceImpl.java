@@ -4,13 +4,13 @@ import com.github.explore_with_me.stats.input_dto.InputHitDto;
 import com.github.explore_with_me.stats.model.Hit;
 import com.github.explore_with_me.stats.output_dto.StatsDto;
 import com.github.explore_with_me.stats.repository.HitRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -33,22 +33,26 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<StatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
-        List<StatsDto> stats = new ArrayList<>();
-
-        if (unique && uris != null) {
-            stats = hitRepository.getUniqueStatsByUrisAndTimestamps(start, end, uris);
+    public List<StatsDto> getStats(LocalDateTime start,
+                                   LocalDateTime end,
+                                   List<String> uris,
+                                   boolean unique) {
+        if (unique) {
+            if (uris != null && !uris.isEmpty()) {
+                uris.replaceAll(s -> s.replace("[", ""));
+                uris.replaceAll(s -> s.replace("]", ""));
+                return hitRepository.getUniqueStatsByUrisAndTimestamps(start, end, uris);
+            } else {
+                return hitRepository.getAllUniqueStats(start, end);
+            }
+        } else {
+            if (uris != null && !uris.isEmpty()) {
+                uris.replaceAll(s -> s.replace("[", ""));
+                uris.replaceAll(s -> s.replace("]", ""));
+                return hitRepository.getStatsByUrisAndTimestamps(start, end, uris);
+            } else {
+                return hitRepository.getAllStats(start, end);
+            }
         }
-        if (!unique && uris != null) {
-            stats = hitRepository.getStatsByUrisAndTimestamps(start, end, uris);
-        }
-        if (!unique && uris == null) {
-            stats = hitRepository.getAllStats(start, end);
-        }
-        if (unique && uris == null) {
-            stats = hitRepository.getAllUniqueStats(start, end);
-        }
-        log.info("Статистика по просмотру событий получена= " + stats);
-        return stats;
     }
 }

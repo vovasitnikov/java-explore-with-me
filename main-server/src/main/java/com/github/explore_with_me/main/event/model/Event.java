@@ -4,25 +4,14 @@ import com.github.explore_with_me.main.category.model.Category;
 import com.github.explore_with_me.main.compilation.model.Compilation;
 import com.github.explore_with_me.main.event.enumerated.State;
 import com.github.explore_with_me.main.user.model.User;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "events")
@@ -38,18 +27,21 @@ public class Event {
     @Column(name = "annotation")
     private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JoinColumn(name = "category_id",
+                referencedColumnName = "id")
     private Category category;
     @Column(name = "created_on")
     private LocalDateTime createdOn;
     @Column(name = "description")
     private String description;
-    @Column(name = "event_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "event_date",
+            columnDefinition = "TIMESTAMP")
     private LocalDateTime eventDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "initiator_id")
     private User initiator;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,
+               cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location location;
     @Column(name = "paid")
@@ -71,6 +63,8 @@ public class Event {
     @Builder.Default
     @Column(name = "views")
     private Long views = 0L;
-    @ManyToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "event",
+                fetch = FetchType.LAZY,
+                cascade = CascadeType.PERSIST)
     private List<Compilation> compilations;
 }

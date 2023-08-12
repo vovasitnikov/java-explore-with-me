@@ -12,12 +12,13 @@ import com.github.explore_with_me.main.requests.repository.RequestRepository;
 import com.github.explore_with_me.main.requests.status.Status;
 import com.github.explore_with_me.main.user.model.User;
 import com.github.explore_with_me.main.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public ParticipationRequestDto createRequest(Long userId, Long eventId) {
+    public ParticipationRequestDto createRequest(Long userId,
+                                                 Long eventId) {
         Request request = new Request();
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
@@ -68,7 +70,8 @@ public class RequestServiceImpl implements RequestService {
 
     @Transactional
     @Override
-    public ParticipationRequestDto cancelRequestByRequester(Long userId, Long requestId) {
+    public ParticipationRequestDto cancelRequestByRequester(Long userId,
+                                                            Long requestId) {
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(
                         () -> new NotFoundException("запрос на участие в событии с id= " + requestId + " не найдено"));

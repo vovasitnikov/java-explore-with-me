@@ -1,9 +1,10 @@
 package com.github.explore_with_me.main.event.dto;
 
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor

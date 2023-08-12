@@ -1,23 +1,23 @@
 package com.github.explore_with_me.main.compilation.service;
 
-import com.github.explore_with_me.main.compilation.mapper.CompilationMapper;
 import com.github.explore_with_me.main.compilation.dto.CompilationDto;
 import com.github.explore_with_me.main.compilation.dto.NewCompilationDto;
 import com.github.explore_with_me.main.compilation.dto.UpdateCompilationRequest;
+import com.github.explore_with_me.main.compilation.mapper.CompilationMapper;
 import com.github.explore_with_me.main.compilation.model.Compilation;
 import com.github.explore_with_me.main.compilation.repository.CompilationRepository;
 import com.github.explore_with_me.main.event.mapper.EventMapstructMapper;
 import com.github.explore_with_me.main.event.model.Event;
 import com.github.explore_with_me.main.event.repository.EventRepository;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +55,9 @@ public class CompilationServiceImpl implements CompilationService {
         log.info("Подборка с id= " + compId + " удалена");
     }
 
-    @Transactional
     @Override
-    public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
+    public CompilationDto updateCompilation(Long compId,
+                                            UpdateCompilationRequest updateCompilationRequest) {
         Compilation compilationForUpdate = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException(String.format("Подборка с id= %s не найдена", compId)));
         if (updateCompilationRequest.getPinned() != null) {
@@ -78,7 +78,6 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationDto;
     }
 
-    @Transactional(readOnly = true)
     @Override
     public CompilationDto getCompilation(Long compId) {
         Compilation compilation = compilationRepository.findById(compId)
@@ -89,11 +88,12 @@ public class CompilationServiceImpl implements CompilationService {
         return compilationDto;
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public List<CompilationDto> getCompilations(boolean pinned, PaginationParams paginationParams) {
-        PageRequest pageRequest = PageRequest.of(paginationParams.getFrom() / paginationParams.getSize(),
-                paginationParams.getSize());
+    public List<CompilationDto> getCompilations(Boolean pinned,
+                                                int from,
+                                                int size) {
+        PageRequest pageRequest = PageRequest.of(from / size,
+                size);
         List<CompilationDto> pagedCompilations = compilationRepository.findAllByPinned(pinned, pageRequest)
                 .stream()
                 .map(compilationMapper::compilationtoCompilationDto)

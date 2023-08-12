@@ -2,14 +2,10 @@ package com.github.explore_with_me.main.compilation.controller;
 
 import com.github.explore_with_me.main.compilation.dto.CompilationDto;
 import com.github.explore_with_me.main.compilation.service.CompilationService;
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/compilations")
@@ -25,8 +21,8 @@ public class PublicCompilationController {
 
     @GetMapping
     public List<CompilationDto> getCompilations(@RequestParam(defaultValue = "false") Boolean pinned,
-            @RequestParam(defaultValue = "0") int from,
-            @RequestParam(defaultValue = "10") int size) {
-        return compilationService.getCompilations(pinned, new PaginationParams(from, size));
+                                                @RequestParam(defaultValue = "0") int from,
+                                                @RequestParam(defaultValue = "10") int size) {
+        return compilationService.getCompilations(pinned, from, size);
     }
 }

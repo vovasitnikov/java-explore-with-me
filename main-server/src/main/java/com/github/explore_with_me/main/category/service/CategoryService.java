@@ -1,8 +1,8 @@
 package com.github.explore_with_me.main.category.service;
 
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
 import com.github.explore_with_me.main.category.dto.CategoryOutDto;
 import com.github.explore_with_me.main.category.dto.NewCategoryDto;
+
 import java.util.List;
 
 public interface CategoryService {
@@ -13,7 +13,7 @@ public interface CategoryService {
 
     CategoryOutDto updateCategory(Long categoryId, NewCategoryDto newCategoryDto);
 
-    List<CategoryOutDto> getCategories(PaginationParams paginationParams);
+    List<CategoryOutDto> getCategories(int from, int size);
 
     CategoryOutDto getCategoryById(Long id);
 }

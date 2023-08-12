@@ -2,26 +2,22 @@ package com.github.explore_with_me.main.event.service;
 
 import com.github.explore_with_me.main.category.model.Category;
 import com.github.explore_with_me.main.category.repository.CategoryRepository;
-import com.github.explore_with_me.main.event.dto.EventOutDto;
-import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateRequest;
-import com.github.explore_with_me.main.event.dto.EventRequestStatusUpdateResult;
-import com.github.explore_with_me.main.event.dto.EventShortDto;
-import com.github.explore_with_me.main.event.dto.NewEventDto;
-import com.github.explore_with_me.main.event.dto.UpdateEventUserDto;
+import com.github.explore_with_me.main.comment.dto.CommentDto;
+import com.github.explore_with_me.main.comment.model.Comment;
+import com.github.explore_with_me.main.event.dto.*;
 import com.github.explore_with_me.main.event.enumerated.Sorting;
 import com.github.explore_with_me.main.event.enumerated.State;
+import com.github.explore_with_me.main.comment.mapper.CommentMapper;
 import com.github.explore_with_me.main.event.mapper.EventMapper;
 import com.github.explore_with_me.main.event.mapper.EventMapstructMapper;
 import com.github.explore_with_me.main.event.model.Event;
 import com.github.explore_with_me.main.event.model.Location;
+import com.github.explore_with_me.main.comment.repository.CommentRepository;
 import com.github.explore_with_me.main.event.repository.EventRepository;
 import com.github.explore_with_me.main.event.repository.LocationRepository;
 import com.github.explore_with_me.main.exception.model.BadRequestException;
 import com.github.explore_with_me.main.exception.model.ConflictException;
 import com.github.explore_with_me.main.exception.model.NotFoundException;
-import com.github.explore_with_me.main.paramEntity.EventFindParam;
-import com.github.explore_with_me.main.paramEntity.GetEventsParam;
-import com.github.explore_with_me.main.paramEntity.PaginationParams;
 import com.github.explore_with_me.main.requests.dto.ParticipationRequestDto;
 import com.github.explore_with_me.main.requests.mapper.RequestMapper;
 import com.github.explore_with_me.main.requests.model.Request;
@@ -30,17 +26,20 @@ import com.github.explore_with_me.main.requests.status.Status;
 import com.github.explore_with_me.main.user.model.User;
 import com.github.explore_with_me.main.user.repository.UserRepository;
 import com.github.explore_with_me.stats.client.StatsClient;
+import com.github.explore_with_me.stats.input_dto.InputHitDto;
 import com.github.explore_with_me.stats.output_dto.StatsDto;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -52,14 +51,17 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
     private final RequestRepository requestRepository;
+    private final CommentRepository commentRepository;
     private final EventMapstructMapper eventMapstructMapper;
     private final EventMapper eventMapperImpl;
     private final RequestMapper requestMapper;
+    private final CommentMapper commentMapper;
     private final StatsClient statsClient;
 
     @Transactional
     @Override
-    public EventOutDto createEvent(NewEventDto newEventDto, Long userId) {
+    public EventOutDto createEvent(NewEventDto newEventDto,
+                                   Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь c id " + userId + " не найден"));
         Category category = categoryRepository.findById(newEventDto.getCategory())
@@ -87,9 +89,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getUserEvents(Long userId, PaginationParams params) {
-        PageRequest pagination = PageRequest.of(params.getFrom() / params.getSize(),
-                params.getSize());
+    public List<EventShortDto> getUserEvents(Long userId,
+                                             int from,
+                                             int size) {
+        PageRequest pagination = PageRequest.of(from / size,
+                size);
         List<Event> allInitiatorEvents = eventRepository.findAllByInitiatorId(userId, pagination);
         List<EventShortDto> userEventsShortDtoList = eventMapstructMapper.eventsToEventShortDtoList(allInitiatorEvents);
         log.info("Пользователь с id= " + userId + " получил список своих событий= " + userEventsShortDtoList);
@@ -97,7 +101,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventOutDto getUserEvent(Long userId, Long eventId) {
+    public EventOutDto getUserEvent(Long userId,
+                                    Long eventId) {
         Event event = eventRepository.findEventByIdAndInitiatorId(eventId, userId);
         if (event == null) {
             throw new NotFoundException("Событие с id= " + eventId + " не найдено");
@@ -109,7 +114,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto patchEvent(Long userId, Long eventId, UpdateEventUserDto updateEventUserDto) {
+    public EventOutDto patchEvent(Long userId,
+                                  Long eventId,
+                                  UpdateEventUserDto updateEventUserDto) {
         Event event = eventRepository.findEventByIdWithCategoryAndLocation(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
         if (event.getState().equals(State.PUBLISHED)) {
@@ -138,7 +145,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getEventRequests(Long userId, Long eventId) {
+    public List<ParticipationRequestDto> getEventRequests(Long userId,
+                                                          Long eventId) {
         List<ParticipationRequestDto> eventParticipationRequests = requestRepository.findAllRequestForEvent(userId,
                 eventId);
         log.info("Получен список запросов на участие в событии с id= " + eventId + "\n Список запросов= "
@@ -148,8 +156,9 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventRequestStatusUpdateResult changeRequestsStatus(Long userId, Long eventId,
-            EventRequestStatusUpdateRequest statusUpdateRequest) {
+    public EventRequestStatusUpdateResult changeRequestsStatus(Long userId,
+                                                               Long eventId,
+                                                               EventRequestStatusUpdateRequest statusUpdateRequest) {
         List<Request> requests = requestRepository.findAllByIdInAndEventInitiatorIdAndEventId(
                         statusUpdateRequest.getRequestIds(), userId,
                         eventId).stream()
@@ -186,7 +195,8 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto publishOrCancelEvent(Long eventId, UpdateEventUserDto updateEventUserDto) {
+    public EventOutDto publishOrCancelEvent(Long eventId,
+                                            UpdateEventUserDto updateEventUserDto) {
         LocalDateTime publicationDate = LocalDateTime.now();
         if (updateEventUserDto.getEventDate() != null && updateEventUserDto.getEventDate()
                 .isBefore(publicationDate.plusHours(1))
@@ -228,22 +238,27 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventOutDto> findEventsByAdmin(EventFindParam eventFindParam, PaginationParams params) {
-        PageRequest pagination = PageRequest.of(params.getFrom() / params.getSize(),
-                params.getSize());
+    public List<EventOutDto> findEventsByAdmin(List<Long> users,
+                                               List<State> states,
+                                               List<Long> categories,
+                                               LocalDateTime rangeStart,
+                                               LocalDateTime rangeEnd,
+                                               Integer from, Integer size) {
+        PageRequest pagination = PageRequest.of(from / size,
+                size);
         LocalDateTime start;
         LocalDateTime end;
-        if (eventFindParam.getRangeStart() == null || eventFindParam.getRangeEnd() == null) {
+        if (rangeStart == null || rangeEnd == null) {
             start = LocalDateTime.now();
             end = start.plusYears(1);
         } else {
-            start = eventFindParam.getRangeStart();
-            end = eventFindParam.getRangeEnd();
+            start = rangeStart;
+            end = rangeEnd;
         }
         List<EventOutDto> eventsByEventParamAndPaginationParams = eventRepository
                 .findEventsByEventParamAndPaginationParams(
-                        eventFindParam.getUserIds(),
-                        eventFindParam.getStates(), eventFindParam.getCategoryIds(), start,
+                        users,
+                        states, categories, start,
                         end, pagination).stream()
                 .map(eventMapstructMapper::eventToEventOutDto)
                 .collect(Collectors.toList());
@@ -253,63 +268,89 @@ public class EventServiceImpl implements EventService {
 
     @Transactional
     @Override
-    public EventOutDto getEvent(Long eventId, String[] uris) {
+    public EventOutDto getEvent(Long eventId, HttpServletRequest request) {
         Event event = eventRepository.findEventByIdWithCategoryAndLocation(
                 eventId).orElseThrow(() -> new NotFoundException("Событие с id= " + eventId + " не найдено"));
         if (event.getState() != State.PUBLISHED) {
             throw new NotFoundException("Событие с id= " + eventId + " не найдено");
         }
         long eventStats = getViews(LocalDateTime
-                .of(1990, 1, 1, 1, 1), LocalDateTime.now(), uris, true);
-        event.setViews(eventStats);
-        event = eventRepository.save(event);
+                .of(1990, 1, 1, 1, 1), LocalDateTime.now(), new String[]{request.getRequestURI()}, true);
         EventOutDto eventOut = eventMapstructMapper.eventToEventOutDto(event);
+        eventOut.setViews(eventStats);
+        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()));
         log.info("Событие с id= " + eventId + " просмотрено");
         return eventOut;
     }
 
     @Override
-    public List<EventShortDto> getEvents(GetEventsParam getEventsParam, PaginationParams pagination) {
+    public List<EventShortDto> getEvents(HttpServletRequest request,
+                                         String text,
+                                         List<Long> categories,
+                                         Boolean paid,
+                                         LocalDateTime rangeStart,
+                                         LocalDateTime rangeEnd,
+                                         boolean onlyAvailable,
+                                         Sorting sort,
+                                         int from,
+                                         int size) {
         PageRequest pageRequest;
         LocalDateTime start;
         LocalDateTime end;
-        Sort sort;
-        if (getEventsParam.getRangeStart() == null || getEventsParam.getRangeEnd() == null) {
+        Sort sorting;
+        if (rangeStart == null || rangeEnd == null) {
             start = LocalDateTime.now();
             end = start.plusYears(1);
         } else {
-            start = getEventsParam.getRangeStart();
-            end = getEventsParam.getRangeEnd();
+            start = rangeStart;
+            end = rangeEnd;
         }
-        if (getEventsParam.getSort() == null || getEventsParam.getSort().equals(Sorting.EVENT_DATE)) {
-            sort = Sort.by("eventDate").descending();
+        if (sort == null || sort.equals(Sorting.EVENT_DATE)) {
+            sorting = Sort.by("eventDate").descending();
         } else {
-            sort = Sort.by("views").descending();
+            sorting = Sort.by("views").descending();
         }
-        pageRequest = PageRequest.of(pagination.getFrom() / pagination.getSize(),
-                pagination.getSize(), sort);
+        pageRequest = PageRequest.of(from / size, size, sorting);
         List<Event> eventsList;
-        if (getEventsParam.getOnlyAvailable()) {
-            eventsList = eventRepository.getOnlyAvailableEvents(getEventsParam.getText(),
-                    getEventsParam.getCategories(), getEventsParam.getPaid(),
+        if (onlyAvailable) {
+            eventsList = eventRepository.getOnlyAvailableEvents(text,
+                    categories, paid,
                     start, end,
                     pageRequest);
         } else {
-            eventsList = eventRepository.getEvents(getEventsParam.getText(),
-                    getEventsParam.getCategories(), getEventsParam.getPaid(),
+            eventsList = eventRepository.getEvents(text,
+                    categories, paid,
                     start, end,
                     pageRequest);
         }
         if (eventsList.isEmpty() || !eventRepository.existsByState(State.PUBLISHED)) {
             throw new BadRequestException("Подходящие события не найдены");
         }
+        statsClient.saveHit(new InputHitDto("explore_with_me_main", request.getRequestURI(),
+                request.getRemoteAddr(),
+                LocalDateTime.now()));
         List<EventShortDto> shortEventDtos = eventMapstructMapper.eventsToEventShortDtoList(eventsList);
         log.info("События получены по публичному эндпоинту= " + eventsList);
         return shortEventDtos;
     }
 
-    private long getViews(LocalDateTime start, LocalDateTime end, String[] uris, boolean unique) {
+    private long getViews(LocalDateTime start,
+                          LocalDateTime end,
+                          String[] uris,
+                          boolean unique) {
         List<StatsDto> eventStats = statsClient.getStats(start, end, uris, unique);
-        return eventStats.get(0).getHits();
+        return eventStats.isEmpty() ? 0 : eventStats.get(0).getHits();
     }
+
+
+    @Override
+    public List<CommentDto> getEventComments(Long eventId, Integer from, Integer size) {
+        PageRequest pageRequest = PageRequest.of(from / size, size, Sort.by("created"));
+        List<Comment> eventComments = commentRepository.findAllByEventId(eventId, pageRequest);
+        log.info("Получены комментарии ивента с id= " + eventId);
+        return commentMapper.commentToCommentDto(eventComments);
+    }
+
 }
